@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { @apply scroll-smooth; }
+
+  body {
+    @apply bg-aura-bg text-aura-text font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(201, 169, 110, 0.18);
+    color: #f0ece6;
+  }
+
+  ::-webkit-scrollbar       { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-aura-subtle rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-aura-muted; }
+}
+
+@layer components {
+  /* ── Buttons ── */
+  .btn-gold {
+    @apply bg-aura-gold text-aura-bg font-medium px-7 py-3 rounded-full text-sm tracking-widest uppercase hover:bg-aura-gold-lt active:scale-95 transition-all duration-200;
+  }
+  .btn-ghost {
+    @apply border border-aura-border text-aura-muted px-7 py-3 rounded-full text-sm tracking-widest uppercase hover:border-aura-gold/40 hover:text-aura-gold active:scale-95 transition-all duration-200;
+  }
+  .btn-icon {
+    @apply flex items-center justify-center rounded-full transition-all duration-200 active:scale-90;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-aura-surface border border-aura-border rounded-2xl;
+  }
+
+  /* ── Interest tag ── */
+  .tag-interest {
+    @apply border border-aura-gold/25 text-aura-gold/75 text-xs px-3 py-1 rounded-full font-light tracking-wide;
+  }
+
+  /* ── Section label ── */
+  .label-section {
+    @apply text-xs uppercase tracking-[0.2em] text-aura-muted font-medium;
+  }
+
+  /* ── Input ── */
+  .input-aura {
+    @apply w-full bg-aura-elevated border border-aura-border rounded-xl px-4 py-3 text-aura-text text-sm
+           placeholder:text-aura-subtle focus:outline-none focus:border-aura-gold/50 transition-colors duration-200;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    @apply border-t border-aura-border;
+  }
+}

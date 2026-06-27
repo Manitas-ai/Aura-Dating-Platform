@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura — Dating Platform · Project Overview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1050 100%);
+    color: #fff;
+    padding: 48px 60px 42px;
+    border-bottom: 4px solid #9b5de5;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,83,122,.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-meta {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #c4a8e8;
+    margin-bottom: 14px;
+  }
+  .header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  .header-logo {
+    font-size: 32px;
+    line-height: 1;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+  }
+  .header-tagline {
+    font-size: 15px;
+    color: #c4a8e8;
+    font-style: italic;
+    margin-bottom: 10px;
+    margin-left: 48px;
+  }
+  .header p {
+    font-size: 15px;
+    color: #b8a0d8;
+    max-width: 660px;
+    line-height: 1.65;
+    margin-left: 48px;
+  }
+  .header-tags {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    padding: 4px 12px;
+    border-radius: 3px;
+    background: rgba(255,255,255,.08);
+    color: #c4a8e8;
+    border: 1px solid rgba(255,255,255,.14);
+    text-transform: uppercase;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1080px; margin: 0 auto; padding: 52px 40px 80px; }
+
+  .section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #9b5de5;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-heading {
+    font-size: 21px;
+    font-weight: 700;
+    color: #1a0a2e;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e5e0f0;
+  }
+
+  /* ── TWO APPS ── */
+  .apps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .app-card {
+    border: 1px solid #ddd6f0;
+    border-radius: 8px;
+    padding: 28px;
+    background: #faf8fd;
+  }
+  .app-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ede8f5;
+  }
+  .app-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .user-dot  { background: #e8537a; }
+  .admin-dot { background: #9b5de5; }
+
+  .app-card h2 { font-size: 16px; font-weight: 700; color: #1a0a2e; }
+  .app-url {
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    color: #9b5de5;
+    background: #f0eafc;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .app-card p { font-size: 13px; color: #4a4060; margin-bottom: 16px; line-height: 1.65; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .feature-list li {
+    font-size: 13px;
+    color: #374151;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .feature-list li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #e8537a;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .app-card.admin-card .feature-list li::before { background: #9b5de5; }
+
+  /* ── AUTH CALLOUT ── */
+  .auth-callout {
+    background: linear-gradient(135deg, #faf0f4, #f5f0fc);
+    border: 1px solid #e8c8d8;
+    border-left: 4px solid #e8537a;
+    border-radius: 8px;
+    padding: 22px 28px;
+    margin-bottom: 24px;
+  }
+  .auth-callout h3 { font-size: 14px; font-weight: 700; color: #1a0a2e; margin-bottom: 8px; }
+  .auth-callout p  { font-size: 13px; color: #4a4060; line-height: 1.65; }
+
+  .creds-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .cred-card {
+    background: #fff;
+    border: 1px solid #ddd6f0;
+    border-radius: 6px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .cred-user {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e8537a;
+    margin-bottom: 2px;
+  }
+  .cred-pass {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #9b5de5;
+    background: #f5f0fc;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+    display: inline-block;
+  }
+  .cred-name { font-size: 11px; color: #6b7280; }
+
+  /* ── SYSTEM ARCHITECTURE ── */
+  .arch-box {
+    border: 1px solid #ddd6f0;
+    border-radius: 8px;
+    background: #faf8fd;
+    padding: 36px 40px;
+  }
+  .arch-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .arch-node {
+    text-align: center;
+    padding: 16px 20px;
+    min-width: 120px;
+  }
+  .arch-node-box {
+    border: 1.5px solid;
+    border-radius: 6px;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .arch-node-sub { font-size: 11px; color: #6b7280; }
+
+  .node-user  .arch-node-box { border-color: #f0a0b8; background: #fdf0f4; color: #c03060; }
+  .node-uapp  .arch-node-box { border-color: #e8537a; background: #fdeef3; color: #e8537a; }
+  .node-db    .arch-node-box { border-color: #1a0a2e; background: #1a0a2e; color: #fff; }
+  .node-admin .arch-node-box { border-color: #9b5de5; background: #f3eafc; color: #9b5de5; }
+  .node-adm   .arch-node-box { border-color: #c4a0f0; background: #f8f2fe; color: #6030a0; }
+
+  .arch-arrow {
+    font-size: 18px;
+    color: #9ca3af;
+    padding: 0 6px;
+    line-height: 1;
+    margin-bottom: 22px;
+  }
+
+  /* ── PROCESS FLOW ── */
+  .swimlanes { display: flex; flex-direction: column; gap: 16px; }
+
+  .swimlane {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border: 1px solid #ddd6f0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .swimlane-label {
+    background: #1a0a2e;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 14px;
+    text-align: center;
+  }
+  .swimlane-label .role     { font-size: 13px; font-weight: 700; }
+  .swimlane-label .role-sub { font-size: 11px; color: #c4a8e8; margin-top: 4px; }
+  .swimlane.user-lane  .swimlane-label { background: #c0356a; }
+  .swimlane.admin-lane .swimlane-label { background: #7040b0; }
+
+  .swimlane-steps {
+    background: #faf8fd;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .step { display: flex; align-items: center; gap: 0; flex-wrap: nowrap; }
+  .step-box {
+    background: #fff;
+    border: 1px solid #ddd6f0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a0a2e;
+    white-space: nowrap;
+    text-align: center;
+    min-width: 110px;
+    line-height: 1.4;
+  }
+  .step-box small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+  .step-arrow { font-size: 14px; color: #9ca3af; padding: 0 10px; flex-shrink: 0; }
+
+  .step-box.highlight-rose   { background: #e8537a; border-color: #e8537a; color: #fff; }
+  .step-box.highlight-rose small { color: #f5c0d0; }
+  .step-box.highlight-violet { background: #9b5de5; border-color: #9b5de5; color: #fff; }
+  .step-box.highlight-violet small { color: #d8b8f8; }
+
+  .flow-connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 12px;
+    color: #6b7280;
+  }
+  .flow-connector::before,
+  .flow-connector::after {
+    content: '';
+    flex: 1;
+    border-top: 1px dashed #c8b8e0;
+  }
+  .flow-connector span {
+    background: #fff;
+    padding: 4px 14px;
+    border: 1px solid #ddd6f0;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #9b5de5;
+    white-space: nowrap;
+  }
+
+  /* ── DATA MODEL ── */
+  .tables-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .db-table {
+    border: 1px solid #ddd6f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .db-table-header {
+    background: #1a0a2e;
+    color: #fff;
+    padding: 12px 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .db-table-header .t-name { font-size: 13px; font-weight: 700; font-family: 'Courier New', monospace; }
+  .db-table-header .t-desc { font-size: 11px; color: #c4a8e8; margin-left: auto; }
+  .db-table-body { padding: 0; }
+  .db-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 18px;
+    border-bottom: 1px solid #f0ebf8;
+    font-size: 12px;
+  }
+  .db-field:last-child  { border-bottom: none; }
+  .db-field:nth-child(even) { background: #faf8fd; }
+  .f-name { font-family: 'Courier New', monospace; color: #1a0a2e; min-width: 130px; font-weight: 600; }
+  .f-type {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #f0ebf8;
+    color: #4a3060;
+    font-family: 'Courier New', monospace;
+  }
+  .f-note { font-size: 11px; color: #9ca3af; margin-left: auto; font-style: italic; }
+  .pk-badge, .fk-badge {
+    font-size: 9px; font-weight: 700;
+    padding: 1px 5px; border-radius: 2px;
+    font-family: sans-serif; letter-spacing: .5px;
+  }
+  .pk-badge { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+  .fk-badge { background: #f3eafc; color: #6b21a8; border: 1px solid #d8b4fe; }
+
+  /* ── SCOPE ── */
+  .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .scope-card {
+    border: 1px solid #ddd6f0;
+    border-radius: 8px;
+    padding: 24px;
+    background: #faf8fd;
+  }
+  .scope-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+  .scope-card.in  h3 { color: #166534; }
+  .scope-card.out h3 { color: #7f1d1d; }
+  .scope-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: #374151;
+    padding: 6px 0;
+    border-bottom: 1px solid #ede8f5;
+  }
+  .scope-item:last-child { border-bottom: none; }
+  .check { color: #16a34a; font-weight: 700; font-size: 14px; }
+  .cross { color: #dc2626; font-weight: 700; font-size: 14px; }
+
+  /* ── DEPLOYMENT ── */
+  .deploy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .deploy-card {
+    border: 1px solid #ddd6f0;
+    border-radius: 8px;
+    padding: 22px;
+    background: #faf8fd;
+  }
+  .deploy-card .d-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; font-weight: 600; }
+  .deploy-card .d-value { font-size: 14px; font-weight: 700; color: #1a0a2e; margin-bottom: 4px; }
+  .deploy-card .d-note  { font-size: 12px; color: #6b7280; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #f8f5fd;
+    border-top: 1px solid #ddd6f0;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  @media (max-width: 720px) {
+    .apps-grid, .tables-grid, .scope-grid, .deploy-grid, .creds-grid { grid-template-columns: 1fr; }
+    .swimlane { grid-template-columns: 1fr; }
+    .swimlane-label { padding: 14px; flex-direction: row; gap: 10px; }
+    .page   { padding: 30px 20px 60px; }
+    .header { padding: 32px 24px; }
+    .header p, .header-tagline { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-meta">Project Overview &nbsp;·&nbsp; Proof of Concept &nbsp;·&nbsp; June 2026</div>
+  <div class="header-title-row">
+    <span class="header-logo">💜</span>
+    <h1>Aura — Dating Platform</h1>
+  </div>
+  <div class="header-tagline">"Find your wavelength."</div>
+  <p>A two-application web platform for modern matchmaking. Users discover and connect with potential partners through a premium, mobile-first interface. Administrators manage member profiles and platform activity from a dedicated control panel.</p>
+  <div class="header-tags">
+    <span class="tag">Proof of Concept</span>
+    <span class="tag">React + TypeScript</span>
+    <span class="tag">Tailwind CSS</span>
+    <span class="tag">Supabase</span>
+    <span class="tag">Netlify</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- THE TWO APPLICATIONS -->
+  <div class="section">
+    <div class="section-title">Applications</div>
+    <div class="section-heading">Two dedicated interfaces — one shared backend</div>
+
+    <div class="apps-grid">
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-dot user-dot"></div>
+          <h2>Aura — User App</h2>
+          <div class="app-url">/user-app/</div>
+        </div>
+        <p>The member-facing dating application. Users log in with a simple username and password, browse other members, like or pass on profiles, and chat with their matches — all in a premium dark-mode interface.</p>
+        <ul class="feature-list">
+          <li>Username + password login (PoC — no email required)</li>
+          <li>Discover page: swipe-style profile cards with like / pass</li>
+          <li>Matches page: grid of mutual connections</li>
+          <li>In-app messaging per match</li>
+          <li>My Profile: view and edit personal details &amp; photos</li>
+          <li>10 pre-seeded demo profiles with ready-to-use credentials</li>
+        </ul>
+      </div>
+
+      <div class="app-card admin-card">
+        <div class="app-card-header">
+          <div class="app-dot admin-dot"></div>
+          <h2>Aura — Admin Panel</h2>
+          <div class="app-url">/admin-app/ &nbsp;🔒</div>
+        </div>
+        <p>Private management interface for platform administrators. Access is restricted by a password gate. Provides complete oversight of members, matches, and conversations.</p>
+        <ul class="feature-list">
+          <li>Password-protected entry gate</li>
+          <li>Dashboard with KPI cards and signup trend chart</li>
+          <li>Member management — view, edit, suspend or delete profiles</li>
+          <li>Matches overview — all mutual connections with dates</li>
+          <li>Messages moderation — read and delete any conversation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH / DEMO USERS -->
+  <div class="section">
+    <div class="section-title">Authentication</div>
+    <div class="section-heading">Simple login for multi-user PoC simulation</div>
+
+    <div class="auth-callout">
+      <h3>How it works</h3>
+      <p>No real authentication system is used. Each profile has a <code>username</code> and a short plaintext <code>password</code> (max 5 characters) stored in the database. On login, the app looks up the matching profile and saves the profile ID to the browser's localStorage. Logging out clears the session. This allows the demonstrator to switch between any of the 10 pre-built personas and experience the platform from multiple perspectives.</p>
+    </div>
+
+    <div class="creds-grid">
+      <div class="cred-card"><div class="cred-user">alex</div><span class="cred-pass">sun42</span><div class="cred-name">Alex, 28 · Berlin</div></div>
+      <div class="cred-card"><div class="cred-user">sara</div><span class="cred-pass">wave7</span><div class="cred-name">Sara, 25 · Munich</div></div>
+      <div class="cred-card"><div class="cred-user">lena</div><span class="cred-pass">mint3</span><div class="cred-name">Lena, 31 · Hamburg</div></div>
+      <div class="cred-card"><div class="cred-user">marco</div><span class="cred-pass">fire9</span><div class="cred-name">Marco, 29 · Cologne</div></div>
+      <div class="cred-card"><div class="cred-user">julia</div><span class="cred-pass">sky11</span><div class="cred-name">Julia, 27 · Frankfurt</div></div>
+      <div class="cred-card"><div class="cred-user">tom</div><span class="cred-pass">rain5</span><div class="cred-name">Tom, 33 · Stuttgart</div></div>
+      <div class="cred-card"><div class="cred-user">nina</div><span class="cred-pass">rose2</span><div class="cred-name">Nina, 26 · Düsseldorf</div></div>
+      <div class="cred-card"><div class="cred-user">felix</div><span class="cred-pass">moon8</span><div class="cred-name">Felix, 30 · Leipzig</div></div>
+      <div class="cred-card"><div class="cred-user">mia</div><span class="cred-pass">star4</span><div class="cred-name">Mia, 24 · Dresden</div></div>
+      <div class="cred-card"><div class="cred-user">david</div><span class="cred-pass">blue6</span><div class="cred-name">David, 35 · Nuremberg</div></div>
+    </div>
+  </div>
+
+  <!-- SYSTEM ARCHITECTURE -->
+  <div class="section">
+    <div class="section-title">System Architecture</div>
+    <div class="section-heading">Both applications connect directly to Supabase — no custom backend required</div>
+
+    <div class="arch-box">
+      <div class="arch-row">
+        <div class="arch-node node-user">
+          <div class="arch-node-box">Members</div>
+          <div class="arch-node-sub">discover &amp; chat</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node node-uapp">
+          <div class="arch-node-box">User App</div>
+          <div class="arch-node-sub">React · TypeScript</div>
+        </div>
+        <div class="arch-arrow">⇄</div>
+        <div class="arch-node node-db">
+          <div class="arch-node-box">Supabase</div>
+          <div class="arch-node-sub">Postgres · REST · Storage</div>
+        </div>
+        <div class="arch-arrow">⇄</div>
+        <div class="arch-node node-admin">
+          <div class="arch-node-box">Admin App</div>
+          <div class="arch-node-sub">React · TypeScript</div>
+        </div>
+        <div class="arch-arrow">←</div>
+        <div class="arch-node node-adm">
+          <div class="arch-node-box">Admin</div>
+          <div class="arch-node-sub">manage &amp; moderate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS FLOW -->
+  <div class="section">
+    <div class="section-title">Process Flow</div>
+    <div class="section-heading">End-to-end journey — from sign-up to first conversation</div>
+
+    <div class="swimlanes">
+
+      <!-- USER FLOW -->
+      <div class="swimlane user-lane">
+        <div class="swimlane-label">
+          <div class="role">Member</div>
+          <div class="role-sub">User App</div>
+        </div>
+        <div class="swimlane-steps">
+          <div class="step">
+            <div class="step-box">Log in<small>Enter username &amp; password</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box">Discover<small>Browse profile cards, like or pass</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box highlight-rose">It's a match!<small>Both users liked each other</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box">Matches page<small>See all mutual connections</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box highlight-rose">Chat<small>Send &amp; receive messages</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-connector"><span>All activity is instantly visible to the admin</span></div>
+
+      <!-- ADMIN FLOW -->
+      <div class="swimlane admin-lane">
+        <div class="swimlane-label">
+          <div class="role">Admin</div>
+          <div class="role-sub">Admin App</div>
+        </div>
+        <div class="swimlane-steps">
+          <div class="step">
+            <div class="step-box">Log in<small>Admin password gate</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box">Dashboard<small>Review KPIs &amp; activity</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box">Members<small>View, edit or suspend profiles</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box">Matches<small>Overview of all connections</small></div>
+            <div class="step-arrow">→</div>
+          </div>
+          <div class="step">
+            <div class="step-box highlight-violet">Moderation<small>Review &amp; remove messages</small></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DATA MODEL -->
+  <div class="section">
+    <div class="section-title">Data Model</div>
+    <div class="section-heading">Five tables in Supabase (Postgres)</div>
+
+    <div class="tables-grid">
+
+      <div class="db-table">
+        <div class="db-table-header">
+          <span class="t-name">profiles</span>
+          <span class="t-desc">members &amp; login credentials</span>
+        </div>
+        <div class="db-table-body">
+          <div class="db-field"><span class="f-name">id</span><span class="f-type">uuid</span><span class="pk-badge">PK</span><span class="f-note">auto-generated</span></div>
+          <div class="db-field"><span class="f-name">username</span><span class="f-type">text</span><span class="f-note">unique login handle</span></div>
+          <div class="db-field"><span class="f-name">password</span><span class="f-type">text</span><span class="f-note">max 5 chars (PoC)</span></div>
+          <div class="db-field"><span class="f-name">name</span><span class="f-type">text</span><span class="f-note">display name</span></div>
+          <div class="db-field"><span class="f-name">age</span><span class="f-type">integer</span></div>
+          <div class="db-field"><span class="f-name">gender</span><span class="f-type">text</span><span class="f-note">man / woman / other</span></div>
+          <div class="db-field"><span class="f-name">looking_for</span><span class="f-type">text</span></div>
+          <div class="db-field"><span class="f-name">location</span><span class="f-type">text</span><span class="f-note">city</span></div>
+          <div class="db-field"><span class="f-name">occupation</span><span class="f-type">text</span></div>
+          <div class="db-field"><span class="f-name">bio</span><span class="f-type">text</span></div>
+          <div class="db-field"><span class="f-name">interests</span><span class="f-type">text[]</span><span class="f-note">e.g. ["hiking","art"]</span></div>
+          <div class="db-field"><span class="f-name">photo_url</span><span class="f-type">text</span><span class="f-note">primary photo</span></div>
+          <div class="db-field"><span class="f-name">status</span><span class="f-type">text</span><span class="f-note">active / suspended</span></div>
+        </div>
+      </div>
+
+      <div class="db-table">
+        <div class="db-table-header">
+          <span class="t-name">profile_photos</span>
+          <span class="t-desc">photo gallery per member</span>
+        </div>
+        <div class="db-table-body">
+          <div class="db-field"><span class="f-name">id</span><span class="f-type">uuid</span><span class="pk-badge">PK</span></div>
+          <div class="db-field"><span class="f-name">profile_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ profiles</span></div>
+          <div class="db-field"><span class="f-name">photo_url</span><span class="f-type">text</span></div>
+          <div class="db-field"><span class="f-name">is_primary</span><span class="f-type">boolean</span><span class="f-note">shown as cover photo</span></div>
+          <div class="db-field"><span class="f-name">sort_order</span><span class="f-type">integer</span><span class="f-note">gallery display order</span></div>
+        </div>
+      </div>
+
+      <div class="db-table">
+        <div class="db-table-header">
+          <span class="t-name">likes</span>
+          <span class="t-desc">directional interest signals</span>
+        </div>
+        <div class="db-table-body">
+          <div class="db-field"><span class="f-name">id</span><span class="f-type">uuid</span><span class="pk-badge">PK</span></div>
+          <div class="db-field"><span class="f-name">from_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ profiles (who liked)</span></div>
+          <div class="db-field"><span class="f-name">to_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ profiles (who was liked)</span></div>
+          <div class="db-field"><span class="f-name">created_at</span><span class="f-type">timestamptz</span></div>
+        </div>
+      </div>
+
+      <div class="db-table">
+        <div class="db-table-header">
+          <span class="t-name">matches</span>
+          <span class="t-desc">mutual connections</span>
+        </div>
+        <div class="db-table-body">
+          <div class="db-field"><span class="f-name">id</span><span class="f-type">uuid</span><span class="pk-badge">PK</span></div>
+          <div class="db-field"><span class="f-name">profile_1_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ profiles</span></div>
+          <div class="db-field"><span class="f-name">profile_2_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ profiles</span></div>
+          <div class="db-field"><span class="f-name">created_at</span><span class="f-type">timestamptz</span><span class="f-note">when match was made</span></div>
+        </div>
+      </div>
+
+      <div class="db-table">
+        <div class="db-table-header">
+          <span class="t-name">messages</span>
+          <span class="t-desc">in-app conversations</span>
+        </div>
+        <div class="db-table-body">
+          <div class="db-field"><span class="f-name">id</span><span class="f-type">uuid</span><span class="pk-badge">PK</span></div>
+          <div class="db-field"><span class="f-name">match_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ matches</span></div>
+          <div class="db-field"><span class="f-name">sender_id</span><span class="f-type">uuid</span><span class="fk-badge">FK</span><span class="f-note">→ profiles</span></div>
+          <div class="db-field"><span class="f-name">content</span><span class="f-type">text</span></div>
+          <div class="db-field"><span class="f-name">created_at</span><span class="f-type">timestamptz</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCOPE -->
+  <div class="section">
+    <div class="section-title">Scope</div>
+    <div class="section-heading">What is — and is not — included in this PoC</div>
+
+    <div class="scope-grid">
+      <div class="scope-card in">
+        <h3>In scope</h3>
+        <div class="scope-item"><span class="check">✓</span>Username / password login &amp; logout</div>
+        <div class="scope-item"><span class="check">✓</span>Profile discovery with like / pass</div>
+        <div class="scope-item"><span class="check">✓</span>Automatic match on mutual like</div>
+        <div class="scope-item"><span class="check">✓</span>In-app messaging per match</div>
+        <div class="scope-item"><span class="check">✓</span>My Profile — view &amp; edit details</div>
+        <div class="scope-item"><span class="check">✓</span>10 fully seeded demo personas</div>
+        <div class="scope-item"><span class="check">✓</span>Admin: member management</div>
+        <div class="scope-item"><span class="check">✓</span>Admin: matches &amp; messages moderation</div>
+        <div class="scope-item"><span class="check">✓</span>Premium dark-mode UI, mobile-responsive</div>
+        <div class="scope-item"><span class="check">✓</span>Deployed on Netlify (free tier)</div>
+      </div>
+      <div class="scope-card out">
+        <h3>Out of scope (PoC)</h3>
+        <div class="scope-item"><span class="cross">✗</span>Real email / OAuth authentication</div>
+        <div class="scope-item"><span class="cross">✗</span>Push or email notifications</div>
+        <div class="scope-item"><span class="cross">✗</span>Real-time chat (WebSocket / subscriptions)</div>
+        <div class="scope-item"><span class="cross">✗</span>Video or voice calling</div>
+        <div class="scope-item"><span class="cross">✗</span>AI-powered matching algorithm</div>
+        <div class="scope-item"><span class="cross">✗</span>Location-based / map filtering</div>
+        <div class="scope-item"><span class="cross">✗</span>Premium subscription or payment</div>
+        <div class="scope-item"><span class="cross">✗</span>Profile verification / identity checks</div>
+        <div class="scope-item"><span class="cross">✗</span>Native mobile application</div>
+        <div class="scope-item"><span class="cross">✗</span>GDPR compliance tooling</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPLOYMENT -->
+  <div class="section">
+    <div class="section-title">Deployment &amp; Infrastructure</div>
+    <div class="section-heading">One repository, two Netlify sites, one Supabase project</div>
+
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <div class="d-label">Source Control</div>
+        <div class="d-value">GitHub</div>
+        <div class="d-note">One repository with two sub-folders: <code>/user-app</code> and <code>/admin-app</code></div>
+      </div>
+      <div class="deploy-card">
+        <div class="d-label">Hosting</div>
+        <div class="d-value">Netlify — Free Tier</div>
+        <div class="d-note">Auto-deploy on git push. Two Netlify sites pointing to the same repo.</div>
+      </div>
+      <div class="deploy-card">
+        <div class="d-label">Database, API &amp; Storage</div>
+        <div class="d-value">Supabase</div>
+        <div class="d-note">Hosted Postgres with REST API. Storage bucket for profile photos.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Aura — Dating Platform &nbsp;·&nbsp; Project Overview</span>
+  <span>Proof of Concept &nbsp;·&nbsp; June 2026</span>
+</footer>
+
+</body>
+</html>
