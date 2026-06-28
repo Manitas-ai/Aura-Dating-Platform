@@ -192,7 +192,7 @@
   <!-- CHART -->
   <div class="chart-wrap">
     <div class="chart-title">German Online Dating Market — Positioning Map</div>
-    <div class="chart-subtitle">Top 10 platforms + Aura target position &nbsp;·&nbsp; Bubble size = relative active user base in Germany</div>
+    <div class="chart-subtitle">Top 10 platforms &nbsp;·&nbsp; Bubble size = relative active user base in Germany</div>
 
     <div class="chart-svg-wrap">
       <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" id="segmap">
@@ -345,17 +345,7 @@
         <text x="610" y="174" font-family="Segoe UI,sans-serif" font-size="9" fill="#1d4ed8" text-anchor="middle" pointer-events="none">~280K users</text>
 
         <!-- ── AURA TARGET ZONE ── -->
-        <!-- Aura: dataX=84, dataY=93 → svgX=80+655=735, svgY=560-502=58 -->
-        <circle cx="735" cy="58" r="36" fill="#d97706" opacity=".12" stroke="#d97706" stroke-width="0" filter="url(#glow)"/>
-        <circle class="bubble" id="b-aura" cx="735" cy="58" r="14" fill="#d97706" opacity=".9" stroke="#fbbf24" stroke-width="2" cursor="pointer" filter="url(#glow)" data-name="Aura (Target Position)" data-tier="New Entrant — AI-Native Premium" data-edu="High · 35–50, educated, professional" data-sinc="Highest · Privacy-first, sincere-only" data-users="New entrant — building" data-insight="The unclaimed whitespace. Highest sincerity + privacy posture, educated premium segment. No incumbent occupies this exact position with modern UX and AI. This is the strategic entry point."/>
-        <!-- Star marker on Aura -->
-        <text x="735" y="62" font-family="Segoe UI,sans-serif" font-size="13" fill="#fff" text-anchor="middle" font-weight="900" pointer-events="none">★</text>
-        <text x="735" y="84" font-family="Segoe UI,sans-serif" font-size="11" fill="#d97706" text-anchor="middle" font-weight="800" pointer-events="none">AURA</text>
-        <text x="735" y="96" font-family="Segoe UI,sans-serif" font-size="9" fill="#d97706" text-anchor="middle" pointer-events="none">target position</text>
-
-        <!-- ── GAP ARROW — from legacy tier 1 zone to Aura ── -->
-        <line x1="700" y1="110" x2="730" y2="74" stroke="#2563eb" stroke-width="1" stroke-dasharray="4,3" opacity=".5"/>
-        <polygon points="727,68 735,74 724,77" fill="#2563eb" opacity=".5"/>
+        <!-- Unclaimed whitespace highlight only — no entrant shown -->
 
         <!-- Chart border -->
         <rect x="80" y="20" width="780" height="540" fill="none" stroke="#e2e8f0" stroke-width="1"/>
@@ -375,10 +365,6 @@
       <div class="legend-item">
         <div class="legend-dot tier3"></div>
         <span><strong>Tier 3</strong> — Mass market / free / low precision</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-dot aura"></div>
-        <span><strong>Aura</strong> — Target positioning (new entrant)</span>
       </div>
       <div class="legend-size">
         <span style="font-size:11px;color:#64748b;">Bubble size = active users &nbsp;</span>
@@ -415,10 +401,10 @@
       <div class="ic-title">A duopoly controls the premium end — and is structurally frozen</div>
       <div class="ic-body">Parship and ElitePartner are sister brands. A single corporate owner controlling both means no internal innovation pressure, shared tech debt, and strategic inability to disrupt themselves. This creates a permanent opening for a well-designed new entrant.</div>
     </div>
-    <div class="insight-card aura-card">
-      <div class="ic-label">Aura Positioning</div>
-      <div class="ic-title">The unclaimed whitespace — sincere · elite · modern · AI-native</div>
-      <div class="ic-body">No bubble occupies the top-right corner with a modern product. Aura's target position — highest sincerity posture, educated 35–50 segment, AI-native, privacy-by-design — has no direct incumbent. This is the most commercially valuable and least contested zone in the map.</div>
+    <div class="insight-card highlight">
+      <div class="ic-label">Strategic Insight 3</div>
+      <div class="ic-title">The top-right corner is unclaimed whitespace</div>
+      <div class="ic-body">No platform combines modern UX, AI matching, and a privacy-first posture in the sincerity + elite quadrant. The most commercially valuable zone in the map has no modern occupant — a permanent opening for a well-designed new entrant.</div>
     </div>
   </div>
 
@@ -470,13 +456,6 @@
           <td>Germany</td>
           <td>Freemium, casual-leaning, limited engineering investment.</td>
           <td>Irrelevant to our target segment.</td>
-        </tr>
-        <tr style="background: #fffbeb;">
-          <td><strong>Aura</strong></td>
-          <td><span class="ow-badge ob-4">Independent (new)</span></td>
-          <td>Germany</td>
-          <td>—</td>
-          <td><strong>Only modern, AI-native, privacy-first, Germany-built serious dating platform. No incumbent conflict. Full strategic freedom.</strong></td>
         </tr>
       </tbody>
     </table>
