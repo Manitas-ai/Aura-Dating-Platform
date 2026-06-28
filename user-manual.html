@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura — User Manual</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    color: #0f1923;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #0a1628;
+    color: #fff;
+    padding: 52px 64px 46px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid #2563eb;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,255,255,.018) 80px, rgba(255,255,255,.018) 81px);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 480px; height: 480px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: #93afd4; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .header-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 2px; background: #2563eb; flex-shrink: 0; }
+  .header-doc-type { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #2563eb; font-weight: 800; margin-bottom: 10px; }
+  .header h1 { font-size: 30px; font-weight: 700; letter-spacing: -.5px; color: #fff; margin-bottom: 8px; }
+  .header-divider { width: 48px; height: 3px; background: #2563eb; margin: 18px 0; }
+  .header-desc { font-size: 14px; color: #94a3b8; max-width: 640px; line-height: 1.75; }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; }
+
+  /* ── STEP CARDS ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 48px; }
+
+  .step-card {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #eff6ff; border: 2px solid #bfdbfe;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; color: #2563eb;
+    flex-shrink: 0;
+  }
+  .step-body h2 {
+    font-size: 15px; font-weight: 700; color: #0f1923; margin-bottom: 6px;
+  }
+  .step-body p {
+    font-size: 13px; color: #374151; line-height: 1.7;
+  }
+  .step-body ul {
+    list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .step-body ul li {
+    font-size: 13px; color: #374151;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .step-body ul li::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: #2563eb; margin-top: 6px; flex-shrink: 0;
+  }
+
+  .tip {
+    font-size: 12px; color: #2563eb; background: #eff6ff;
+    border: 1px solid #bfdbfe; border-radius: 6px;
+    padding: 8px 14px; margin-top: 10px; line-height: 1.5;
+  }
+  .tip strong { font-weight: 700; }
+
+  /* ── PRINCIPLES ── */
+  .principles-title {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: #2563eb; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .principles-title::before { content: ''; display: inline-block; width: 18px; height: 2px; background: #2563eb; flex-shrink: 0; }
+  .principles-heading { font-size: 18px; font-weight: 700; color: #0f1923; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #dde3ea; }
+
+  .principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .principle-card {
+    background: #fff; border: 1px solid #dde3ea; border-radius: 10px; padding: 18px 20px;
+  }
+  .principle-card .p-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #2563eb; margin-bottom: 6px;
+  }
+  .principle-card p { font-size: 13px; color: #374151; line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0a1628; border-top: 1px solid rgba(255,255,255,.07);
+    padding: 20px 64px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: #64748b; letter-spacing: .5px;
+  }
+
+  @media (max-width: 600px) {
+    .page   { padding: 28px 20px 60px; }
+    .header { padding: 36px 24px; }
+    .step-card { grid-template-columns: 36px 1fr; gap: 14px; }
+    .principles-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Aura Dating Platform &nbsp;·&nbsp; Alpha</div>
+  <div class="header-doc-type">User Manual</div>
+  <h1>How to use Aura</h1>
+  <div class="header-divider"></div>
+  <div class="header-desc">Aura is built for people who are serious about finding a meaningful connection — not the fastest one. No swiping, no algorithms. Just deliberate browsing, honest profiles, and real conversations.</div>
+</div>
+
+<div class="page">
+
+  <!-- STEPS -->
+  <div class="steps">
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h2>Log in</h2>
+        <p>Enter your username and password on the login screen. You received these from the person who invited you. There is no email address required — just your username and a short password. Tap <strong>Sign in</strong> to enter.</p>
+        <div class="tip"><strong>Can't log in?</strong> Double-check the exact username and password. Both are case-sensitive.</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h2>Complete your profile</h2>
+        <p>Go to <strong>Profile</strong> (bottom right). Fill in your basic info — age group, region, and a short description. Then upload up to 5 photos and set one as your primary photo.</p>
+        <p style="margin-top:8px">Most importantly: fill in the <strong>Questionnaire</strong>. It has 7 chapters covering your life situation, values, lifestyle, and more. For each chapter you decide who can see it:</p>
+        <ul>
+          <li><strong>Public</strong> — anyone browsing your profile can read it</li>
+          <li><strong>Flirts only</strong> — only visible after a flirt is accepted on both sides</li>
+        </ul>
+        <div class="tip"><strong>Tip:</strong> The more honest and detailed your answers, the more meaningful your connections will be. Your questionnaire is what makes Aura different from other apps.</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h2>Browse on Discover</h2>
+        <p>Go to <strong>Discover</strong> (bottom left). You'll see all active members. Browse at your own pace — there is no swiping or time pressure.</p>
+        <p style="margin-top:8px">Use the <strong>Filter</strong> button to narrow by gender, age group, region, whether they have kids, or their desired relationship type. Tap any profile card to open the full profile, including any questionnaire chapters they've made public.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h2>Add someone to your Observation List</h2>
+        <p>When a profile interests you, tap the eye icon on their card, or tap <strong>Add to Observation List</strong> inside their profile. This is completely private — they won't be notified. Use it as your personal shortlist while you take your time to decide.</p>
+        <p style="margin-top:8px">Find your list under <strong>Observe</strong> in the bottom navigation.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h2>Propose a Flirt</h2>
+        <p>When you're ready to reach out, go to your <strong>Observation List</strong> and tap <strong>Propose a flirt</strong> next to the person. Write a short personal message — up to 120 characters — about something you genuinely noticed in their profile. Then send.</p>
+        <ul>
+          <li>You have a maximum of <strong>2 attempts</strong> per person</li>
+          <li>If your first proposal is declined, you may try once more</li>
+          <li>After two declines, no further proposals to that person are possible</li>
+        </ul>
+        <div class="tip"><strong>Tip:</strong> A specific, personal message ("I loved your reading list on Proust") works far better than a generic one. This is your first impression.</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h2>Handle incoming proposals</h2>
+        <p>Go to <strong>Flirts</strong> (bottom navigation) and open the <strong>Pending</strong> tab. You'll see everyone who has proposed a flirt with you — their profile summary and their personal message. Take your time.</p>
+        <ul>
+          <li>Tap <strong>Accept</strong> to open a private chat with them</li>
+          <li>Tap <strong>Decline</strong> to pass — no explanation needed</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <h2>Start your conversation</h2>
+        <p>Once both sides have accepted, a private 1-to-1 chat opens automatically in <strong>Flirts</strong>. There is no time limit, no countdown, no gamification. Write when you're ready. The conversation is yours.</p>
+        <div class="tip"><strong>Note:</strong> Once a flirt is accepted, you can also see the other person's questionnaire chapters marked as "Flirts only".</div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <h2>Leave feedback</h2>
+        <p>Aura is in alpha. Your experience directly shapes what gets built next. Go to <strong>Feedback</strong> in the navigation and tell us what worked, what felt off, and what you'd like to see. Every submission is read by the team.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PRINCIPLES -->
+  <div>
+    <div class="principles-title">Design principles</div>
+    <div class="principles-heading">Why Aura works differently</div>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="p-title">No swiping</div>
+        <p>Deliberate browsing replaces the dopamine swipe loop. You open profiles properly and read them.</p>
+      </div>
+      <div class="principle-card">
+        <div class="p-title">No public age or city</div>
+        <p>You decide what to share and with whom. Age group and region replace exact age and location.</p>
+      </div>
+      <div class="principle-card">
+        <div class="p-title">Personal message required</div>
+        <p>Every flirt proposal must include a note about something you noticed. No silent likes.</p>
+      </div>
+      <div class="principle-card">
+        <div class="p-title">Private observation</div>
+        <p>You can watch a profile quietly before deciding to reach out. No pressure, no notifications.</p>
+      </div>
+      <div class="principle-card">
+        <div class="p-title">Questionnaire depth</div>
+        <p>Your answers reveal what actually matters to you — not just what you look like.</p>
+      </div>
+      <div class="principle-card">
+        <div class="p-title">Visibility control</div>
+        <p>You choose per chapter who can read your answers — the world, or only your accepted flirts.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Aura — Dating Platform &nbsp;·&nbsp; User Manual</span>
+  <span>Alpha &nbsp;·&nbsp; June 2026</span>
+</footer>
+
+</body>
+</html>
