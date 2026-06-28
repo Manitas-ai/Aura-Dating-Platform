@@ -2,15 +2,15 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Profile } from '../types'
 
 interface AuthCtx {
-  profile:  Profile | null
-  login:    (p: Profile) => void
-  logout:   () => void
-  loading:  boolean
+  profile:       Profile | null
+  login:         (p: Profile) => void
+  logout:        () => void
+  updateProfile: (partial: Partial<Profile>) => void
+  loading:       boolean
 }
 
 const AuthContext = createContext<AuthCtx | null>(null)
 
-const STORAGE_KEY = 'aura_profile_id'
 const PROFILE_KEY = 'aura_profile_data'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -20,30 +20,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = localStorage.getItem(PROFILE_KEY)
     if (stored) {
-      try {
-        setProfile(JSON.parse(stored))
-      } catch {
-        localStorage.removeItem(PROFILE_KEY)
-        localStorage.removeItem(STORAGE_KEY)
-      }
+      try { setProfile(JSON.parse(stored)) }
+      catch { localStorage.removeItem(PROFILE_KEY) }
     }
     setLoading(false)
   }, [])
 
   const login = (p: Profile) => {
     setProfile(p)
-    localStorage.setItem(STORAGE_KEY,  p.id)
-    localStorage.setItem(PROFILE_KEY,  JSON.stringify(p))
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(p))
   }
 
   const logout = () => {
     setProfile(null)
-    localStorage.removeItem(STORAGE_KEY)
     localStorage.removeItem(PROFILE_KEY)
   }
 
+  const updateProfile = (partial: Partial<Profile>) => {
+    setProfile(prev => {
+      if (!prev) return prev
+      const updated = { ...prev, ...partial }
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(updated))
+      return updated
+    })
+  }
+
   return (
-    <AuthContext.Provider value={{ profile, login, logout, loading }}>
+    <AuthContext.Provider value={{ profile, login, logout, updateProfile, loading }}>
       {children}
     </AuthContext.Provider>
   )

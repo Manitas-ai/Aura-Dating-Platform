@@ -5,7 +5,7 @@ import { useAdminAuth } from '../context/AuthContext'
 const NAV = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/members',   icon: Users,           label: 'Members'   },
-  { to: '/matches',   icon: Heart,           label: 'Matches'   },
+  { to: '/matches',   icon: Heart,           label: 'Flirts'    },
   { to: '/messages',  icon: MessageCircle,   label: 'Messages'  },
 ]
 

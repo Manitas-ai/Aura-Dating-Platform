@@ -4,14 +4,14 @@ import { db } from '../lib/supabase'
 import { Message } from '../types'
 
 interface Thread {
-  matchId:   string
-  p1Name:    string
-  p1Photo?:  string
-  p2Name:    string
-  p2Photo?:  string
-  msgCount:  number
-  lastMsg?:  string
-  lastAt?:   string
+  flirtId:  string
+  p1Name:   string
+  p1Photo?: string
+  p2Name:   string
+  p2Photo?: string
+  msgCount: number
+  lastMsg?: string
+  lastAt?:  string
 }
 
 export default function MessagesPage() {
@@ -24,26 +24,26 @@ export default function MessagesPage() {
 
   async function load() {
     setLoading(true)
-    const { data: matches } = await db
-      .from('matches')
-      .select('id, profile_1:profiles!matches_profile_1_id_fkey(name,photo_url), profile_2:profiles!matches_profile_2_id_fkey(name,photo_url)')
+    const { data: flirts } = await db
+      .from('flirts')
+      .select('id, profile_1:profiles!flirts_profile_1_id_fkey(username,photo_url), profile_2:profiles!flirts_profile_2_id_fkey(username,photo_url)')
       .order('created_at', { ascending: false })
 
-    if (!matches) { setLoading(false); return }
+    if (!flirts) { setLoading(false); return }
 
-    const threads: Thread[] = await Promise.all(matches.map(async (m: any) => {
+    const threads: Thread[] = await Promise.all(flirts.map(async (f: any) => {
       const { data: ms, count } = await db
         .from('messages')
         .select('content,created_at', { count: 'exact' })
-        .eq('match_id', m.id)
+        .eq('flirt_id', f.id)
         .order('created_at', { ascending: false })
         .limit(1)
       return {
-        matchId:  m.id,
-        p1Name:   m.profile_1?.name,
-        p1Photo:  m.profile_1?.photo_url,
-        p2Name:   m.profile_2?.name,
-        p2Photo:  m.profile_2?.photo_url,
+        flirtId:  f.id,
+        p1Name:   f.profile_1?.username,
+        p1Photo:  f.profile_1?.photo_url,
+        p2Name:   f.profile_2?.username,
+        p2Photo:  f.profile_2?.photo_url,
         msgCount: count || 0,
         lastMsg:  ms?.[0]?.content,
         lastAt:   ms?.[0]?.created_at,
@@ -54,21 +54,21 @@ export default function MessagesPage() {
     setLoading(false)
   }
 
-  const expandThread = async (matchId: string) => {
-    if (expanded === matchId) { setExpanded(null); return }
-    setExpanded(matchId)
-    if (msgs[matchId]) return
+  const expandThread = async (flirtId: string) => {
+    if (expanded === flirtId) { setExpanded(null); return }
+    setExpanded(flirtId)
+    if (msgs[flirtId]) return
     const { data } = await db
       .from('messages')
-      .select('*, sender:profiles!messages_sender_id_fkey(name)')
-      .eq('match_id', matchId)
+      .select('*, sender:profiles!messages_sender_id_fkey(username)')
+      .eq('flirt_id', flirtId)
       .order('created_at')
-    setMsgs(prev => ({ ...prev, [matchId]: (data as any[]) || [] }))
+    setMsgs(prev => ({ ...prev, [flirtId]: (data as any[]) || [] }))
   }
 
-  const deleteMsg = async (msgId: string, matchId: string) => {
+  const deleteMsg = async (msgId: string, flirtId: string) => {
     await db.from('messages').delete().eq('id', msgId)
-    setMsgs(prev => ({ ...prev, [matchId]: prev[matchId].filter(m => m.id !== msgId) }))
+    setMsgs(prev => ({ ...prev, [flirtId]: prev[flirtId].filter(m => m.id !== msgId) }))
   }
 
   const fmt = (iso: string) =>
@@ -91,9 +91,9 @@ export default function MessagesPage() {
       ) : (
         <div className="space-y-2">
           {threads.map(t => (
-            <div key={t.matchId} className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden">
+            <div key={t.flirtId} className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden">
               <button
-                onClick={() => expandThread(t.matchId)}
+                onClick={() => expandThread(t.flirtId)}
                 className="w-full flex items-center gap-4 px-6 py-4 hover:bg-slate-50/50 transition-colors text-left"
               >
                 <div className="flex -space-x-2 flex-shrink-0">
@@ -102,7 +102,7 @@ export default function MessagesPage() {
                       <img key={i} src={p.photo} alt={p.name} className="w-9 h-9 rounded-full object-cover border-2 border-white" />
                     ) : (
                       <div key={i} className="w-9 h-9 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center">
-                        <span className="font-serif text-sm text-slate-400">{p.name?.[0]}</span>
+                        <span className="font-serif text-sm text-slate-400">{p.name?.[0]?.toUpperCase()}</span>
                       </div>
                     )
                   ))}
@@ -116,24 +116,24 @@ export default function MessagesPage() {
                   <ChevronDown
                     size={14}
                     strokeWidth={1.5}
-                    className={`text-slate-400 transition-transform ${expanded === t.matchId ? 'rotate-180' : ''}`}
+                    className={`text-slate-400 transition-transform ${expanded === t.flirtId ? 'rotate-180' : ''}`}
                   />
                 </div>
               </button>
 
-              {expanded === t.matchId && (
+              {expanded === t.flirtId && (
                 <div className="border-t border-slate-100 divide-y divide-slate-50">
-                  {(msgs[t.matchId] || []).map((m: any) => (
+                  {(msgs[t.flirtId] || []).map((m: any) => (
                     <div key={m.id} className="flex items-start gap-4 px-6 py-3 group hover:bg-slate-50/40">
                       <div className="flex-1 min-w-0">
-                        <span className="text-xs font-medium text-slate-500">{m.sender?.name}</span>
+                        <span className="text-xs font-medium text-slate-500">{m.sender?.username}</span>
                         <span className="mx-2 text-slate-300">·</span>
                         <span className="text-xs text-slate-400 font-light">{fmt(m.created_at)}</span>
                         <p className="text-sm text-slate-600 font-light mt-1 leading-relaxed">{m.content}</p>
                       </div>
                       <button
-                        onClick={() => deleteMsg(m.id, t.matchId)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors flex-shrink-0"
+                        onClick={() => deleteMsg(m.id, t.flirtId)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg text-slate-300 hover:text-red-400 hover:bg-red-50 flex-shrink-0"
                       >
                         <Trash2 size={13} strokeWidth={1.5} />
                       </button>

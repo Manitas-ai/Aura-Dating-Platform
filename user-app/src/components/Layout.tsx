@@ -1,22 +1,21 @@
 import { Outlet, NavLink, useLocation } from 'react-router-dom'
-import { Compass, Heart, MessageCircle, User } from 'lucide-react'
+import { Compass, Eye, Flame, User } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const NAV = [
-  { to: '/discover',  icon: Compass,        label: 'Discover'  },
-  { to: '/matches',   icon: Heart,          label: 'Matches'   },
-  { to: '/messages',  icon: MessageCircle,  label: 'Messages'  },
-  { to: '/profile',   icon: User,           label: 'Profile'   },
+  { to: '/discover', icon: Compass, label: 'Discover' },
+  { to: '/observe',  icon: Eye,     label: 'Observe'  },
+  { to: '/flirts',   icon: Flame,   label: 'Flirts'   },
+  { to: '/profile',  icon: User,    label: 'Profile'  },
 ]
 
 export default function Layout() {
   const { profile } = useAuth()
   const loc = useLocation()
 
-  // Which section are we in? (for mobile bottom nav active state)
   const active = (to: string) =>
-    to === '/messages'
-      ? loc.pathname.startsWith('/messages')
+    to === '/flirts'
+      ? loc.pathname.startsWith('/flirts')
       : loc.pathname === to
 
   return (
@@ -35,7 +34,7 @@ export default function Layout() {
               to={to}
               className={({ isActive }) =>
                 `px-5 py-2 rounded-full text-xs uppercase tracking-[0.18em] transition-all duration-200 ` +
-                (isActive || (to === '/messages' && loc.pathname.startsWith('/messages'))
+                (isActive || (to === '/flirts' && loc.pathname.startsWith('/flirts'))
                   ? 'text-aura-gold'
                   : 'text-aura-muted hover:text-aura-text')
               }
@@ -49,15 +48,15 @@ export default function Layout() {
           {profile?.photo_url ? (
             <img
               src={profile.photo_url}
-              alt={profile.name}
+              alt={profile.username}
               className="w-8 h-8 rounded-full object-cover border border-aura-border"
             />
           ) : (
             <div className="w-8 h-8 rounded-full bg-aura-elevated border border-aura-border flex items-center justify-center">
-              <span className="text-xs text-aura-muted font-medium">{profile?.name[0]}</span>
+              <span className="text-xs text-aura-muted font-medium">{profile?.username[0].toUpperCase()}</span>
             </div>
           )}
-          <span className="text-sm text-aura-muted font-light">{profile?.name}</span>
+          <span className="text-sm text-aura-muted font-light">{profile?.username}</span>
         </div>
       </header>
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { db } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { Profile } from '../types'
@@ -134,7 +134,7 @@ export default function LoginPage() {
           <div className="mt-10 pt-6 border-t border-aura-border/40">
             <p className="label-section mb-3">Demo credentials</p>
             <div className="grid grid-cols-2 gap-2">
-              {[['alex','sun42'],['sara','wave7'],['lena','mint3'],['marco','fire9']].map(([u,p]) => (
+              {[['alex','sun42'],['sara','wave7'],['lena','mint3'],['marco','fire9'],['julia','sky11']].map(([u,p]) => (
                 <button
                   key={u}
                   onClick={() => { setUsername(u); setPassword(p) }}
@@ -145,6 +145,15 @@ export default function LoginPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-xs text-aura-subtle font-light">
+              New here?{' '}
+              <Link to="/register" className="text-aura-gold hover:text-aura-gold-lt transition-colors">
+                Create an account
+              </Link>
+            </p>
           </div>
 
         </div>

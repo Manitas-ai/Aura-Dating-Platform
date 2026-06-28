@@ -20,9 +20,8 @@ export default function MembersPage() {
     if (search) {
       const q = search.toLowerCase()
       list = list.filter(m =>
-        m.name.toLowerCase().includes(q) ||
-        m.location?.toLowerCase().includes(q) ||
-        m.username.toLowerCase().includes(q)
+        m.username.toLowerCase().includes(q) ||
+        (m.region || '').toLowerCase().includes(q)
       )
     }
     setFiltered(list)
@@ -38,7 +37,7 @@ export default function MembersPage() {
   const toggleStatus = async (m: Profile) => {
     const next = m.status === 'active' ? 'suspended' : 'active'
     await db.from('profiles').update({ status: next }).eq('id', m.id)
-    setMembers(prev => prev.map(p => p.id === m.id ? { ...p, status: next } : p))
+    setMembers(prev => prev.map(p => p.id === m.id ? { ...p, status: next as any } : p))
   }
 
   const deleteMember = async (id: string) => {
@@ -50,8 +49,7 @@ export default function MembersPage() {
   const saveEdit = async () => {
     if (!editPrf) return
     setSaving(true)
-    const { bio, occupation, location, age } = editPrf
-    await db.from('profiles').update({ bio, occupation, location, age }).eq('id', editPrf.id)
+    await db.from('profiles').update({ about_me: editPrf.about_me, region: editPrf.region, age_group: editPrf.age_group }).eq('id', editPrf.id)
     setMembers(prev => prev.map(p => p.id === editPrf.id ? editPrf : p))
     setSaving(false)
     setEditPrf(null)
@@ -70,14 +68,13 @@ export default function MembersPage() {
         <h1 className="font-serif text-3xl font-light text-slate-800">Members</h1>
       </div>
 
-      {/* Toolbar */}
       <div className="flex flex-wrap gap-3 mb-6 items-center">
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <Search size={14} strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search members…"
+            placeholder="Search by username or region…"
             className="w-full pl-9 pr-4 py-2.5 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-aura-gold/50 transition-colors"
           />
         </div>
@@ -98,12 +95,11 @@ export default function MembersPage() {
         </div>
       </div>
 
-      {/* Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-slate-100">
-              {['Member','Age / City','Occupation','Looking for','Status','Actions'].map(h => (
+              {['Member','Age Group / Region','Looking For','Status','Actions'].map(h => (
                 <th key={h} className="text-left px-5 py-4 text-[11px] uppercase tracking-[0.14em] text-slate-400 font-medium">{h}</th>
               ))}
             </tr>
@@ -112,34 +108,33 @@ export default function MembersPage() {
             {loading ? (
               [...Array(6)].map((_, i) => (
                 <tr key={i}>
-                  <td colSpan={6} className="px-5 py-4">
+                  <td colSpan={5} className="px-5 py-4">
                     <div className="h-4 bg-slate-100 rounded animate-pulse w-full" />
                   </td>
                 </tr>
               ))
             ) : filtered.length === 0 ? (
-              <tr><td colSpan={6} className="text-center py-12 text-slate-400 text-sm font-light">No members found.</td></tr>
+              <tr><td colSpan={5} className="text-center py-12 text-slate-400 text-sm font-light">No members found.</td></tr>
             ) : (
               filtered.map(m => (
                 <tr key={m.id} className="hover:bg-slate-50/60 transition-colors">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
                       {m.photo_url ? (
-                        <img src={m.photo_url} alt={m.name} className="w-9 h-9 rounded-full object-cover border border-slate-200 flex-shrink-0" />
+                        <img src={m.photo_url} alt={m.username} className="w-9 h-9 rounded-full object-cover border border-slate-200 flex-shrink-0" />
                       ) : (
                         <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
-                          <span className="font-serif text-base text-slate-400">{m.name[0]}</span>
+                          <span className="font-serif text-base text-slate-400">{m.username[0].toUpperCase()}</span>
                         </div>
                       )}
                       <div>
-                        <p className="text-sm font-medium text-slate-700">{m.name}</p>
-                        <p className="text-xs text-slate-400 font-mono">@{m.username}</p>
+                        <p className="text-sm font-medium text-slate-700">{m.username}</p>
+                        <p className="text-xs text-slate-400 font-mono capitalize">{m.gender}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3.5 text-sm text-slate-500 font-light">{m.age} · {m.location}</td>
-                  <td className="px-5 py-3.5 text-sm text-slate-500 font-light">{m.occupation || '—'}</td>
-                  <td className="px-5 py-3.5 text-sm text-slate-500 font-light capitalize">{m.looking_for}</td>
+                  <td className="px-5 py-3.5 text-sm text-slate-500 font-light">{m.age_group || '—'} · {m.region || '—'}</td>
+                  <td className="px-5 py-3.5 text-sm text-slate-500 font-light capitalize">{m.looking_for || '—'}</td>
                   <td className="px-5 py-3.5">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium uppercase tracking-wider ${
                       m.status === 'active'
@@ -182,7 +177,6 @@ export default function MembersPage() {
         </table>
       </div>
 
-      {/* Edit modal */}
       {editPrf && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setEditPrf(null)}>
           <div className="bg-white rounded-2xl border border-slate-200 p-7 w-full max-w-md shadow-xl" onClick={e => e.stopPropagation()}>
@@ -192,27 +186,24 @@ export default function MembersPage() {
             </div>
             <div className="space-y-3">
               {[
-                { label: 'Name',       field: 'name',       type: 'text' },
-                { label: 'Age',        field: 'age',        type: 'number' },
-                { label: 'Location',   field: 'location',   type: 'text' },
-                { label: 'Occupation', field: 'occupation', type: 'text' },
-              ].map(({ label, field, type }) => (
+                { label: 'Age Group', field: 'age_group' },
+                { label: 'Region',    field: 'region'    },
+              ].map(({ label, field }) => (
                 <div key={field}>
                   <label className="block text-xs uppercase tracking-[0.18em] text-slate-400 mb-1.5">{label}</label>
                   <input
-                    type={type}
                     value={(editPrf as any)[field] || ''}
-                    onChange={e => setEditPrf({ ...editPrf, [field]: type === 'number' ? +e.target.value : e.target.value } as Profile)}
+                    onChange={e => setEditPrf({ ...editPrf, [field]: e.target.value } as Profile)}
                     className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-aura-gold/50 transition-colors"
                   />
                 </div>
               ))}
               <div>
-                <label className="block text-xs uppercase tracking-[0.18em] text-slate-400 mb-1.5">Bio</label>
+                <label className="block text-xs uppercase tracking-[0.18em] text-slate-400 mb-1.5">About me</label>
                 <textarea
                   rows={3}
-                  value={editPrf.bio || ''}
-                  onChange={e => setEditPrf({ ...editPrf, bio: e.target.value })}
+                  value={editPrf.about_me || ''}
+                  onChange={e => setEditPrf({ ...editPrf, about_me: e.target.value })}
                   className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-aura-gold/50 transition-colors resize-none"
                 />
               </div>
@@ -226,7 +217,6 @@ export default function MembersPage() {
           </div>
         </div>
       )}
-
     </div>
   )
 }

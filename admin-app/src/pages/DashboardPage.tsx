@@ -28,9 +28,9 @@ export default function DashboardPage() {
     ] = await Promise.all([
       db.from('profiles').select('*', { count: 'exact', head: true }),
       db.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', today.toISOString()),
-      db.from('matches').select('*',  { count: 'exact', head: true }),
+      db.from('flirts').select('*',   { count: 'exact', head: true }),
       db.from('messages').select('*', { count: 'exact', head: true }),
-      db.from('profiles').select('id,name,photo_url,location,age,created_at').order('created_at', { ascending: false }).limit(5),
+      db.from('profiles').select('id,username,photo_url,region,age_group,created_at').order('created_at', { ascending: false }).limit(5),
     ])
 
     setStats({
@@ -68,7 +68,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         <KPI icon={Users}         label="Total Members"   value={stats?.totalMembers  || 0} sub="all time" />
         <KPI icon={UserPlus}      label="Joined Today"    value={stats?.newToday      || 0} sub="last 24h" />
-        <KPI icon={Heart}         label="Total Matches"   value={stats?.totalMatches  || 0} sub="mutual likes" />
+        <KPI icon={Heart}         label="Active Flirts"   value={stats?.totalMatches  || 0} sub="accepted connections" />
         <KPI icon={MessageCircle} label="Messages Sent"   value={stats?.totalMessages || 0} sub="all time" />
       </div>
 
@@ -92,15 +92,15 @@ export default function DashboardPage() {
             stats?.recentMembers.map((m: any) => (
               <div key={m.id} className="flex items-center gap-4 px-6 py-4">
                 {m.photo_url ? (
-                  <img src={m.photo_url} alt={m.name} className="w-10 h-10 rounded-full object-cover border border-slate-200 flex-shrink-0" />
+                  <img src={m.photo_url} alt={m.username} className="w-10 h-10 rounded-full object-cover border border-slate-200 flex-shrink-0" />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
-                    <span className="font-serif text-lg text-slate-400">{m.name[0]}</span>
+                    <span className="font-serif text-lg text-slate-400">{m.username[0].toUpperCase()}</span>
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-700">{m.name}</p>
-                  <p className="text-xs text-slate-400 font-light">{m.location} · {m.age}</p>
+                  <p className="text-sm font-medium text-slate-700">{m.username}</p>
+                  <p className="text-xs text-slate-400 font-light">{m.region || '—'} · {m.age_group || '—'}</p>
                 </div>
                 <span className="text-xs text-slate-400 font-light">
                   {new Date(m.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}

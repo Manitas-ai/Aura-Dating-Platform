@@ -2,31 +2,29 @@ export interface Profile {
   id:          string
   username:    string
   password:    string
-  name:        string
-  age:         number
-  gender:      'man' | 'woman' | 'other'
-  looking_for: 'men' | 'women' | 'everyone'
-  location:    string
-  occupation:  string | null
-  bio:         string | null
+  age_group:   string | null
+  gender:      string | null
+  looking_for: string | null
+  region:      string | null
+  about_me:    string | null
   interests:   string[]
   photo_url:   string | null
   status:      'active' | 'suspended'
   created_at:  string
 }
 
-export interface Match {
-  id:           string
-  profile_1_id: string
-  profile_2_id: string
-  created_at:   string
-  profile_1?:   Profile
-  profile_2?:   Profile
+export interface Flirt {
+  id:            string
+  profile_1_id:  string
+  profile_2_id:  string
+  created_at:    string
+  profile_1?:    Profile
+  profile_2?:    Profile
 }
 
 export interface Message {
   id:         string
-  match_id:   string
+  flirt_id:   string
   sender_id:  string
   content:    string
   created_at: string

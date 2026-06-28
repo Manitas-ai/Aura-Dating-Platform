@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura — Executive Briefing · High-Level Project Plan</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    color: #0f1923;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #0a1628;
+    color: #fff;
+    padding: 52px 64px 46px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid #2563eb;
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg, transparent, transparent 80px,
+      rgba(255,255,255,.018) 80px, rgba(255,255,255,.018) 81px
+    );
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: #93afd4; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .header-eyebrow::before {
+    content: '';
+    display: inline-block; width: 28px; height: 2px;
+    background: #2563eb; flex-shrink: 0;
+  }
+  .header-doc-type {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: #2563eb; font-weight: 800; margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 26px; font-weight: 400; letter-spacing: -.3px;
+    color: #cbd5e1; line-height: 1.3; margin-bottom: 6px;
+    font-style: italic;
+  }
+  .header h1 span { color: #93c5fd; font-style: normal; font-weight: 600; }
+  .header-divider {
+    width: 48px; height: 3px; background: #2563eb;
+    margin: 18px 0;
+  }
+  .header-tagline {
+    font-size: 17px; color: #93afd4;
+    font-style: italic; margin-bottom: 10px;
+    font-weight: 400;
+  }
+  .header-tagline strong { color: #cbd5e1; font-style: normal; font-weight: 600; }
+  .header-desc {
+    font-size: 14px; color: #94a3b8; max-width: 760px; line-height: 1.75;
+  }
+  .header-stats {
+    display: flex; gap: 0; margin-top: 36px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 6px; overflow: hidden;
+    width: fit-content;
+  }
+  .h-stat {
+    display: flex; flex-direction: column;
+    padding: 16px 28px;
+    border-right: 1px solid rgba(255,255,255,.1);
+    min-width: 120px;
+  }
+  .h-stat:last-child { border-right: none; }
+  .h-stat .s-num { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+  .h-stat .s-lbl { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #64748b; margin-top: 3px; }
+
+  /* ── MAIN ── */
+  .page { max-width: 1160px; margin: 0 auto; padding: 48px 40px 80px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 56px; }
+  .section-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: #2563eb; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after {
+    content: ''; flex: 0 0 32px; height: 1px; background: #2563eb; opacity: .4;
+  }
+  .section-heading {
+    font-size: 22px; font-weight: 800; color: #0f1923;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 1px solid #dde3ea;
+    letter-spacing: -.3px;
+  }
+
+  /* ── OPPORTUNITY SECTION ── */
+  .opportunity-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 28px; }
+
+  .opp-main {
+    background: #0a1628;
+    border-radius: 10px;
+    padding: 32px 36px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .opp-main::after {
+    content: '';
+    position: absolute; bottom: -40px; right: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,.2) 0%, transparent 70%);
+  }
+  .opp-main .om-overline { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #2563eb; font-weight: 700; margin-bottom: 12px; }
+  .opp-main .om-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; line-height: 1.3; letter-spacing: -.3px; }
+  .opp-main .om-body { font-size: 13px; color: #94a3b8; line-height: 1.75; }
+  .opp-main .om-stat { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.1); display: flex; gap: 24px; }
+  .opp-main .om-stat-item { display: flex; flex-direction: column; }
+  .opp-main .om-stat-item .ms-num { font-size: 26px; font-weight: 800; color: #fff; }
+  .opp-main .om-stat-item .ms-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-top: 2px; }
+
+  .opp-cards { display: flex; flex-direction: column; gap: 14px; }
+  .opp-card {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 20px 22px;
+    border-left: 3px solid #2563eb;
+  }
+  .opp-card .oc-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #2563eb; font-weight: 700; margin-bottom: 5px; }
+  .opp-card .oc-value { font-size: 20px; font-weight: 800; color: #0f1923; margin-bottom: 4px; }
+  .opp-card .oc-note  { font-size: 12px; color: #64748b; line-height: 1.55; }
+
+  /* ── SEGMENT CALLOUT ── */
+  .segment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .segment-card {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 22px 20px;
+    text-align: center;
+  }
+  .segment-card .sg-icon { font-size: 26px; margin-bottom: 10px; }
+  .segment-card .sg-title { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 6px; }
+  .segment-card .sg-stat { font-size: 22px; font-weight: 800; color: #2563eb; margin-bottom: 4px; }
+  .segment-card .sg-note { font-size: 11px; color: #64748b; line-height: 1.55; }
+
+  .segment-why {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 24px 28px;
+    border-left: 3px solid #2563eb;
+  }
+  .segment-why .sw-title { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 10px; }
+  .segment-why ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .segment-why ul li {
+    font-size: 12px; color: #374151;
+    padding: 5px 0 5px 16px; position: relative;
+    border-bottom: 1px solid #f1f5f9;
+    line-height: 1.5;
+  }
+  .segment-why ul li:last-child, .segment-why ul li:nth-last-child(2):not(:nth-child(even)) { border-bottom: none; }
+  .segment-why ul li::before { content: '→'; position: absolute; left: 0; color: #2563eb; font-weight: 700; font-size: 11px; top: 6px; }
+
+  /* ── EFFORT CARDS ── */
+  .effort-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .effort-card {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .effort-card .ef-num { font-size: 36px; font-weight: 800; color: #0f1923; line-height: 1; letter-spacing: -1px; }
+  .effort-card .ef-unit { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .effort-card .ef-lbl { font-size: 12px; color: #374151; font-weight: 600; }
+  .effort-card .ef-sub { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+
+  /* ── GANTT ── */
+  .gantt-wrap {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .gantt-header {
+    display: grid;
+    grid-template-columns: 210px repeat(12, 1fr);
+    background: #0a1628;
+    color: #fff;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .gantt-header div { padding: 10px 4px; border-right: 1px solid rgba(255,255,255,.07); text-align: center; }
+  .gantt-header div:first-child { text-align: left; padding-left: 18px; border-right: 2px solid rgba(255,255,255,.15); }
+  .gantt-row {
+    display: grid;
+    grid-template-columns: 210px repeat(12, 1fr);
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center; min-height: 44px;
+  }
+  .gantt-row:last-child { border-bottom: none; }
+  .gantt-row:nth-child(even) { background: #fafbfc; }
+  .gantt-label {
+    padding: 10px 18px;
+    font-size: 12px; font-weight: 700; color: #0f1923;
+    border-right: 2px solid #e2e8f0;
+  }
+  .gantt-label small { font-weight: 400; color: #94a3b8; font-size: 10px; display: block; margin-top: 2px; }
+  .gantt-cell {
+    padding: 5px 3px; border-right: 1px solid #f1f5f9;
+    min-height: 44px; display: flex; align-items: center; justify-content: center;
+  }
+  .gantt-bar {
+    height: 22px; border-radius: 4px; width: 100%;
+    font-size: 9px; font-weight: 700; color: rgba(255,255,255,.9);
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: .3px;
+  }
+  .gb-1  { background: #1e3a5f; }
+  .gb-2  { background: #1d4ed8; }
+  .gb-2b { background: #0e7490; }
+  .gb-3  { background: #1e40af; }
+  .gb-4  { background: #075985; }
+  .gb-5  { background: #155e75; }
+  .gb-6  { background: #0f4c75; }
+  .gb-7  { background: #312e81; }
+  .gb-8  { background: #134e4a; }
+  .gb-9  { background: #0c4a6e; }
+  .gb-10 { background: #0a1628; }
+  .gb-parallel { background: repeating-linear-gradient(45deg, #1e40af, #1e40af 5px, #2563eb 5px, #2563eb 10px); }
+
+  /* ── PHASE BLOCKS ── */
+  .phases-wrapper { display: flex; flex-direction: column; gap: 12px; }
+  .phase-block {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .phase-header {
+    display: grid;
+    grid-template-columns: 240px 1fr auto;
+    align-items: stretch;
+  }
+  .phase-meta {
+    padding: 20px 24px;
+    color: #fff;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .phase-meta .pm-badge { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; opacity: .65; font-weight: 700; margin-bottom: 5px; }
+  .phase-meta .pm-name  { font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -.2px; }
+  .phase-meta .pm-span  { font-size: 11px; opacity: .7; margin-top: 5px; font-weight: 500; }
+
+  .ph-I    .phase-meta { background: #1e3a5f; }
+  .ph-II   .phase-meta { background: #1d4ed8; }
+  .ph-III  .phase-meta { background: #0e7490; }
+  .ph-IV   .phase-meta { background: #1e40af; }
+  .ph-V    .phase-meta { background: #075985; }
+  .ph-VI   .phase-meta { background: #155e75; }
+  .ph-VII  .phase-meta { background: #0f4c75; }
+  .ph-VIII .phase-meta { background: #312e81; }
+  .ph-IX   .phase-meta { background: #134e4a; }
+  .ph-X    .phase-meta { background: #0c4a6e; }
+  .ph-XI   .phase-meta { background: #0a1628; }
+
+  .phase-summary {
+    padding: 20px 24px;
+    border-right: 1px solid #f1f5f9;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .phase-summary .ps-headline { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 5px; }
+  .phase-summary .ps-desc { font-size: 12px; color: #4b5563; line-height: 1.6; }
+
+  .phase-metrics {
+    padding: 20px 24px;
+    display: flex; flex-direction: column; gap: 7px; justify-content: center;
+    min-width: 155px;
+  }
+  .pm-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; }
+  .pm-item .pm-key { color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+  .pm-item .pm-val { font-weight: 700; color: #0f1923; }
+
+  .phase-detail {
+    border-top: 1px solid #f1f5f9;
+    padding: 16px 24px 18px;
+    background: #fafbfc;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  .detail-col .dc-title {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #2563eb; font-weight: 700; margin-bottom: 8px;
+  }
+  .detail-col ul { list-style: none; }
+  .detail-col ul li {
+    font-size: 11px; color: #4b5563;
+    padding: 3px 0 3px 12px; position: relative; line-height: 1.55;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .detail-col ul li:last-child { border-bottom: none; }
+  .detail-col ul li::before { content: '·'; position: absolute; left: 0; color: #2563eb; font-weight: 900; }
+
+  /* ── RESOURCE SECTION ── */
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .resource-card {
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .rc-header {
+    padding: 14px 18px;
+    font-size: 11px; font-weight: 700; color: #fff;
+    display: flex; align-items: center; gap: 10px;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .rc-body { padding: 16px 18px; }
+  .rc-body .rc-role { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .rc-body .rc-qty  { font-size: 28px; font-weight: 800; color: #0f1923; line-height: 1; margin-bottom: 10px; letter-spacing: -1px; }
+  .rc-body .rc-note { font-size: 12px; color: #4b5563; line-height: 1.65; margin-bottom: 12px; }
+  .rc-body .rc-tasks { list-style: none; }
+  .rc-body .rc-tasks li {
+    font-size: 11px; color: #4b5563;
+    padding: 4px 0 4px 14px; position: relative;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .rc-body .rc-tasks li:last-child { border-bottom: none; }
+  .rc-body .rc-tasks li::before { content: '›'; position: absolute; left: 0; color: #2563eb; font-weight: 900; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 24px;
+    border-left: 4px solid;
+  }
+  .callout-blue   { background: #eff6ff; border-left-color: #2563eb; }
+  .callout-slate  { background: #f8fafc; border-left-color: #475569; }
+  .callout-teal   { background: #f0fdfa; border-left-color: #0d9488; }
+  .callout h3 { font-size: 13px; font-weight: 700; color: #0f1923; margin-bottom: 5px; }
+  .callout p  { font-size: 13px; color: #374151; line-height: 1.7; }
+
+  /* ── TWO COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ── TABLE ── */
+  .std-table {
+    width: 100%; border-collapse: collapse;
+    border: 1px solid #dde3ea; border-radius: 8px; overflow: hidden;
+    font-size: 12px;
+  }
+  .std-table thead tr { background: #0a1628; color: #fff; }
+  .std-table thead th { padding: 11px 16px; text-align: left; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
+  .std-table tbody tr { border-bottom: 1px solid #f1f5f9; }
+  .std-table tbody tr:last-child { border-bottom: none; }
+  .std-table tbody tr:nth-child(even) { background: #fafbfc; }
+  .std-table tbody td { padding: 10px 16px; color: #374151; vertical-align: middle; }
+  .std-table tbody td:first-child { font-weight: 600; color: #0f1923; }
+  .badge-yes  { color: #065f46; font-weight: 700; }
+  .badge-no   { color: #9ca3af; }
+  .badge-part { color: #92400e; font-weight: 600; }
+  .badge-aura { color: #1d4ed8; font-weight: 700; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0a1628;
+    padding: 20px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: #475569;
+  }
+  footer strong { color: #94a3b8; }
+
+  @media (max-width: 960px) {
+    .effort-row, .segment-grid { grid-template-columns: 1fr 1fr; }
+    .resource-grid, .opportunity-grid, .two-col { grid-template-columns: 1fr; }
+    .phase-header { grid-template-columns: 1fr; }
+    .phase-detail { grid-template-columns: 1fr; }
+    .gantt-wrap { overflow-x: auto; }
+    .header { padding: 36px 28px; }
+    .page { padding: 32px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Aura Dating Platform &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; June 2026</div>
+  <div class="header-doc-type">Executive Briefing &nbsp;·&nbsp; High-Level Project Plan</div>
+  <h1>a sincere dating platform for sincere people.</h1>
+  <div class="header-divider"></div>
+  <div class="header-tagline">"Find your wavelength." &nbsp;— &nbsp;<strong>A sincere dating platform for sincere people.</strong></div>
+  <div class="header-desc">
+    This briefing outlines the strategic opportunity, target market rationale, and full development plan for Aura — a professionally designed, AI-powered dating platform built for educated, successful adults aged 35–50 seeking genuine long-term relationships. It covers all eleven project phases from initial research through to market launch and continuous product development.
+  </div>
+  <div class="header-stats">
+    <div class="h-stat"><span class="s-num">€2.4B</span><span class="s-lbl">EU Market by 2027</span></div>
+    <div class="h-stat"><span class="s-num">35–50</span><span class="s-lbl">Target Age Segment</span></div>
+    <div class="h-stat"><span class="s-num">11 Phases</span><span class="s-lbl">End-to-End Plan</span></div>
+    <div class="h-stat"><span class="s-num">44 Weeks</span><span class="s-lbl">to Launch</span></div>
+    <div class="h-stat"><span class="s-num">Germany</span><span class="s-lbl">Primary Market</span></div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- MARKET OPPORTUNITY -->
+  <div class="section">
+    <div class="section-label">Strategic Context</div>
+    <div class="section-heading">Why this market, why now, why this segment</div>
+
+    <div class="opportunity-grid">
+      <div class="opp-main">
+        <div class="om-overline">Market Opportunity</div>
+        <div class="om-title">Online dating in Germany is growing — but the 35–50 segment is systematically underserved</div>
+        <div class="om-body">
+          The mainstream platforms — Tinder, Bumble, Hinge — are designed for users in their twenties. Their swipe-heavy, engagement-optimised models actively frustrate the 35–50 age group, who represent a disproportionately high share of disposable income, subscription willingness, and genuine relationship intent. Existing "serious" platforms such as Parship and ElitePartner suffer from dated UX, weak AI, and no mobile-native product thinking. Aura is designed to fill this gap: premium experience, modern technology, and a design philosophy built around outcomes — not engagement metrics.
+        </div>
+        <div class="om-stat">
+          <div class="om-stat-item"><span class="ms-num">€380M</span><span class="ms-lbl">German market size</span></div>
+          <div class="om-stat-item"><span class="ms-num">+12%</span><span class="ms-lbl">Annual growth rate</span></div>
+          <div class="om-stat-item"><span class="ms-num">40%</span><span class="ms-lbl">Relationships start online</span></div>
+        </div>
+      </div>
+
+      <div class="opp-cards">
+        <div class="opp-card">
+          <div class="oc-label">Segment Value</div>
+          <div class="oc-value">2.1M potential users</div>
+          <div class="oc-note">Estimated addressable market in DACH region: single adults aged 35–50 with university degree and above-average income, actively seeking relationships.</div>
+        </div>
+        <div class="opp-card">
+          <div class="oc-label">Willingness to Pay</div>
+          <div class="oc-value">2.8× higher than 18–30s</div>
+          <div class="oc-note">Research consistently shows that users aged 35+ are significantly more willing to pay for premium features and value quality over price in digital products.</div>
+        </div>
+        <div class="opp-card">
+          <div class="oc-label">Competitive Whitespace</div>
+          <div class="oc-value">No dominant player</div>
+          <div class="oc-note">No single app owns the 35–50 premium segment with modern UX and AI. This is a rare window before a well-funded incumbent moves in.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TARGET SEGMENT -->
+  <div class="section">
+    <div class="section-label">Target Market</div>
+    <div class="section-heading">Germany, 35–50 — the strategic case for this demographic</div>
+
+    <div class="segment-grid">
+      <div class="segment-card">
+        <div class="sg-icon">🎓</div>
+        <div class="sg-title">Highly Educated</div>
+        <div class="sg-stat">68%</div>
+        <div class="sg-note">of the 35–50 German singles cohort hold a university degree or equivalent professional qualification</div>
+      </div>
+      <div class="segment-card">
+        <div class="sg-icon">💼</div>
+        <div class="sg-title">Professionally Established</div>
+        <div class="sg-stat">€62k+</div>
+        <div class="sg-note">average gross household income. Mid-to-senior career stage. Values quality, privacy, and time efficiency above all</div>
+      </div>
+      <div class="segment-card">
+        <div class="sg-icon">📈</div>
+        <div class="sg-title">Growing Fast</div>
+        <div class="sg-stat">+18%</div>
+        <div class="sg-note">growth in online dating adoption among 35–50s since 2021 — driven by post-pandemic behavioural shift and normalisation of digital dating</div>
+      </div>
+      <div class="segment-card">
+        <div class="sg-icon">🎯</div>
+        <div class="sg-title">High Intent</div>
+        <div class="sg-stat">83%</div>
+        <div class="sg-note">explicitly seek long-term partnership or serious relationship — not casual encounters. High conversion potential to paying subscribers</div>
+      </div>
+    </div>
+
+    <div class="segment-why">
+      <div class="sw-title">What this segment demands — and why current apps fail them</div>
+      <ul>
+        <li>Privacy and data discretion as a non-negotiable baseline</li>
+        <li>Profile depth — bios, values, lifestyle, not just photos</li>
+        <li>Verified, authentic profiles — no bots, no fake accounts</li>
+        <li>Time efficiency — curated matches, not infinite scrolling</li>
+        <li>Respectful, non-gamified UX — no streak mechanics</li>
+        <li>Intelligent matching based on compatibility, not proximity</li>
+        <li>Support for complex life situations: divorce, children, relocation</li>
+        <li>A premium visual experience commensurate with their standards</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EFFORT OVERVIEW -->
+  <div class="section">
+    <div class="section-label">Project Scope</div>
+    <div class="section-heading">Scale of work — what this initiative encompasses</div>
+
+    <div class="effort-row">
+      <div class="effort-card">
+        <div class="ef-num">11</div>
+        <div class="ef-unit">Phases</div>
+        <div class="ef-lbl">Distinct Project Phases</div>
+        <div class="ef-sub">From vision to continuous improvement</div>
+      </div>
+      <div class="effort-card">
+        <div class="ef-num">46</div>
+        <div class="ef-unit">Topics</div>
+        <div class="ef-lbl">Workstreams &amp; Deliverables</div>
+        <div class="ef-sub">Each with defined outputs and reviews</div>
+      </div>
+      <div class="effort-card">
+        <div class="ef-num">~44</div>
+        <div class="ef-unit">Weeks</div>
+        <div class="ef-lbl">End-to-End Duration</div>
+        <div class="ef-sub">First brief to v1.0 market launch</div>
+      </div>
+      <div class="effort-card">
+        <div class="ef-num">6+</div>
+        <div class="ef-unit">Disciplines</div>
+        <div class="ef-lbl">Skills Engaged</div>
+        <div class="ef-sub">Strategy, design, engineering, legal, marketing, AI</div>
+      </div>
+    </div>
+
+    <div class="callout callout-slate">
+      <h3>A note on scope</h3>
+      <p>This project spans ten professional disciplines simultaneously. Strategy and user research run in parallel with legal and business planning. UX design overlaps with technical architecture. Development runs across six four-week engineering sprints. Each phase has real deliverables — documents, designs, prototypes, tested code, compliance artefacts — not just presentations. The timeline and resource requirements below reflect this reality.</p>
+    </div>
+  </div>
+
+  <!-- GANTT -->
+  <div class="section">
+    <div class="section-label">Timeline</div>
+    <div class="section-heading">44-week delivery plan — phase schedule at a glance</div>
+
+    <div class="gantt-wrap">
+      <div class="gantt-header">
+        <div>Phase</div>
+        <div>W1–4</div><div>W5–8</div><div>W9–12</div><div>W13–16</div>
+        <div>W17–20</div><div>W21–24</div><div>W25–28</div><div>W29–32</div>
+        <div>W33–36</div><div>W37–40</div><div>W41–44</div><div>Ongoing</div>
+      </div>
+
+      <div class="gantt-row">
+        <div class="gantt-label">Phase I<small>Vision &amp; Strategy</small></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-1">Strategy</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-1" style="opacity:.45;"></div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase II<small>Target User Research</small></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-1" style="opacity:.25;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-2">Research</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-2" style="opacity:.45;"></div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase III<small>Target Market Research</small></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-2b" style="opacity:.35;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-2b">Market Res.</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-2b" style="opacity:.4;"></div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase IV<small>Product Design</small></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-3" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-3">Product</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-3" style="opacity:.45;"></div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase V<small>UX &amp; UI Design</small></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-4" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-4">UX / UI</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-4">UX / UI</div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase VI<small>Technical Architecture</small></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-5" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-5">Architecture</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-5" style="opacity:.45;"></div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase X<small>Business &amp; Legal</small></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-8" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-8">Business</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-8">Legal</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-8" style="opacity:.4;"></div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase VII<small>Development (MVP)</small></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-6">Sprint 1</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-6">Sprint 2</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-6">Sprint 3</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-6">Sprint 4</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-6">Sprint 5</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-6">Sprint 6</div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase VIII<small>Testing &amp; QA</small></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-7" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-7" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-7">QA</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-7">Beta</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-7">PenTest</div></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase X<small>Go-to-Market</small></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-9" style="opacity:.3;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-9">Brand / Mktg</div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-9">Launch 🇩🇪</div></div>
+        <div class="gantt-cell"></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Phase XI<small>Growth &amp; Improvement</small></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-10" style="opacity:.4;"></div></div>
+        <div class="gantt-cell"><div class="gantt-bar gb-10">Continuous</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE DETAIL -->
+  <div class="section">
+    <div class="section-label">Phase Detail</div>
+    <div class="section-heading">Every phase — objectives, deliverables, and what it involves</div>
+
+    <div class="phases-wrapper">
+
+      <div class="phase-block ph-I">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase I</div>
+            <div class="pm-name">Vision &amp; Strategy</div>
+            <div class="pm-span">Weeks 1–4 &nbsp;·&nbsp; 4 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Establishing the strategic foundation everything else is built on</div>
+            <div class="ps-desc">Vision, market sizing, competitive landscape, and strategic positioning. A weak strategy at this stage creates compounding misalignment across all downstream phases. This phase produces the documented case for the product.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">3–4 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Workstreams</span><span class="pm-val">4</span></div>
+            <div class="pm-item"><span class="pm-key">Deliverables</span><span class="pm-val">8+ documents</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Problem &amp; Vision</div>
+            <ul>
+              <li>Define the core problem with evidence</li>
+              <li>Write formal vision and mission statement</li>
+              <li>Define success criteria and North Star metric</li>
+              <li>Establish guiding principles for all product decisions</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Market Research</div>
+            <ul>
+              <li>EU and German online dating market size and growth</li>
+              <li>Demographic data: age, income, education, intent</li>
+              <li>AI impact on dating apps (2024–2027 horizon)</li>
+              <li>Technology trends: video, voice, AI matching</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Competitor Analysis (15+ apps)</div>
+            <ul>
+              <li>Tinder, Bumble, Hinge, Badoo (mainstream)</li>
+              <li>Parship, ElitePartner, eDarling, LoveScout24</li>
+              <li>Niche: Christian, LGBTQ+, Senior, Fitness</li>
+              <li>Positioning, pricing, strengths, weaknesses per player</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-II">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase II</div>
+            <div class="pm-name">Target User Research</div>
+            <div class="pm-span">Weeks 3–7 &nbsp;·&nbsp; 5 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Understanding the 35–50 German user before building anything</div>
+            <div class="ps-desc">Evidence-based personas, journey maps, pain point analyses, and interview findings. This phase is what separates products users love from products that feel designed for someone else. Skipping it is the primary cause of failed product launches.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">4–5 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Interviews</span><span class="pm-val">15+ sessions</span></div>
+            <div class="pm-item"><span class="pm-key">Deliverables</span><span class="pm-val">12+ artefacts</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">User Personas (×4)</div>
+            <ul>
+              <li>Anna, 42 — divorced, two children, values trust and discretion</li>
+              <li>Michael, 47 — senior manager, time-poor, low tolerance for poor UX</li>
+              <li>Julia, 38 — physician, privacy-conscious, seeks intellectual peer</li>
+              <li>Lukas, 36 — international career, travels regularly</li>
+              <li>Goals, fears, frustrations, motivations, preferred features, verbatim quote</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Research Methods</div>
+            <ul>
+              <li>1:1 qualitative interviews (15 participants, 35–50 segment)</li>
+              <li>Online survey: 100+ responses on pain points and priorities</li>
+              <li>Jobs-to-be-Done framework analysis</li>
+              <li>Affinity mapping of recurring themes across all interviews</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Journey &amp; Pain Points</div>
+            <ul>
+              <li>9-stage user journey: from "I am ready" to "We are together"</li>
+              <li>Emotional curve, friction points, and drop-off moments mapped</li>
+              <li>Key frustrations: ghosting, fake profiles, subscription traps</li>
+              <li>Privacy expectations specific to 35–50 age group</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-III">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase III</div>
+            <div class="pm-name">Target Market Research</div>
+            <div class="pm-span">Weeks 7–12 &nbsp;·&nbsp; 4 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Deep-dive research on the 35–50 premium segment — now that we know exactly who we are building for</div>
+            <div class="ps-desc">Phase I delivered high-level market sizing. This phase goes deeper: it analyses the competitive landscape exclusively through the lens of our defined target user. Tinder, Bumble, and Hinge are no longer relevant benchmarks here — our users do not use them. The focus shifts to Parship, ElitePartner, LoveScout24, and international premium platforms, examined in the specific context of a 35–50, educated, German-speaking audience.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">4–5 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Workstreams</span><span class="pm-val">4</span></div>
+            <div class="pm-item"><span class="pm-key">Deliverables</span><span class="pm-val">10+ documents</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Segment-Specific Competitor Analysis</div>
+            <ul>
+              <li>Parship — deep-dive: algorithm, pricing, UX, trust signals, churn, NPS</li>
+              <li>ElitePartner — positioning, premium tier, strengths, weaknesses</li>
+              <li>LoveScout24 — market share, feature gaps, user complaints</li>
+              <li>eDarling — psychometric matching model, pricing, conversion</li>
+              <li>Zweisam (50+), Gleichklang (values-based) — niche adjacencies</li>
+              <li>International: eharmony, Hinge (serious mode), Once — what we can learn</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Market Evolution &amp; Trends (35–50 lens)</div>
+            <ul>
+              <li>How this demographic's online dating behaviour has shifted 2018–2025</li>
+              <li>Post-divorce and second-relationship market growth in Germany</li>
+              <li>AI and safety features as primary purchase drivers for 35–50 users</li>
+              <li>Subscription fatigue and pricing sensitivity in the premium segment</li>
+              <li>Trust and data privacy as conversion-critical factors (not just hygiene)</li>
+              <li>Growth in older-demographic mobile-first usage (iOS vs Android split)</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Segment Gap Analysis &amp; Positioning</div>
+            <ul>
+              <li>Feature gap matrix: what our target users want vs what exists today</li>
+              <li>Price-to-value perception study across existing platforms</li>
+              <li>User acquisition channels that work for 35–50 (not TikTok)</li>
+              <li>Trust-building mechanisms absent from all current competitors</li>
+              <li>Emotional triggers and decision factors unique to this life stage</li>
+              <li>Output: refined positioning statement and differentiation manifesto</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-IV">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase IV</div>
+            <div class="pm-name">Product Design</div>
+            <div class="pm-span">Weeks 6–11 &nbsp;·&nbsp; 6 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Defining what we build, in what order, and to what standard</div>
+            <div class="ps-desc">Feature brainstorm, prioritisation using MoSCoW, Kano, and RICE frameworks, and a clearly defined MVP. This phase prevents the most expensive mistake in product development: building the wrong things first.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">4–5 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Workstreams</span><span class="pm-val">6</span></div>
+            <div class="pm-item"><span class="pm-key">Frameworks</span><span class="pm-val">MoSCoW, Kano, RICE</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Feature Backlog</div>
+            <ul>
+              <li>Progressive privacy reveal (unique differentiator)</li>
+              <li>AI-powered compatibility scoring and explanation</li>
+              <li>Profile depth: values, lifestyle, relationship goals</li>
+              <li>Video and audio introductions with AI verification</li>
+              <li>In-app date planning assistant</li>
+              <li>Anti-ghosting conversation nudges</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Prioritisation</div>
+            <ul>
+              <li>MoSCoW: Must Have / Should / Could / Won't</li>
+              <li>Kano model: identify true delighters vs baseline expectations</li>
+              <li>RICE scoring: Reach × Impact × Confidence ÷ Effort</li>
+              <li>Value vs Complexity matrix for final triage</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">MVP &amp; Benchmark</div>
+            <ul>
+              <li>Clear definition of what ships in v1.0</li>
+              <li>Feature matrix vs Tinder, Bumble, Hinge, Parship</li>
+              <li>Core principles: privacy-first, quality over quantity, trust over engagement</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-V">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase V</div>
+            <div class="pm-name">UX &amp; UI Design</div>
+            <div class="pm-span">Weeks 8–15 &nbsp;·&nbsp; 4 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Every screen designed, tested, and approved before engineering begins</div>
+            <div class="ps-desc">Professional UX design eliminates the most costly form of rework — changing core flows mid-development. This phase delivers wireframes for 30+ screens, a complete design system, and a tested Figma prototype. The 35–50 segment is particularly sensitive to poor UX.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">6–8 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Screens</span><span class="pm-val">30+ designed</span></div>
+            <div class="pm-item"><span class="pm-key">User Tests</span><span class="pm-val">3 rounds</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Design System</div>
+            <ul>
+              <li>Colour palette, typography scale, spacing grid</li>
+              <li>Full component library (buttons, inputs, cards, modals, navigation)</li>
+              <li>Brand identity: wordmark, visual language, tone of voice</li>
+              <li>Dark and light mode; WCAG 2.1 AA accessibility compliance</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Wireframes — All Screens</div>
+            <ul>
+              <li>Login, sign-up, identity verification, onboarding quiz</li>
+              <li>Profile creation, editing, photo management</li>
+              <li>Discovery interface, like / pass, compatibility view</li>
+              <li>Matches, conversation, chat, date planner</li>
+              <li>Settings, privacy controls, subscription, notifications</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Prototype &amp; Testing</div>
+            <ul>
+              <li>High-fidelity Figma prototype with all transitions and states</li>
+              <li>Moderated usability testing (8 participants, target segment)</li>
+              <li>Iteration cycle based on findings</li>
+              <li>Final design sign-off before engineering handoff</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-VI">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase VI</div>
+            <div class="pm-name">Technical Architecture</div>
+            <div class="pm-span">Weeks 10–15 &nbsp;·&nbsp; 5 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Blueprint for a scalable, secure, GDPR-native platform</div>
+            <div class="ps-desc">Architectural decisions made now determine the platform's stability for years. This phase defines the full technology stack, data model, security design, and AI architecture. Shortcuts here create vulnerabilities and technical debt that become exponentially more expensive to fix post-launch.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">4–5 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Workstreams</span><span class="pm-val">5</span></div>
+            <div class="pm-item"><span class="pm-key">Diagrams</span><span class="pm-val">10+ ADRs</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">System &amp; Stack</div>
+            <ul>
+              <li>Mobile: Flutter or React Native (iOS + Android)</li>
+              <li>Backend: Spring Boot (Java) or Node.js microservices</li>
+              <li>Database: PostgreSQL (relational) + MongoDB (media metadata)</li>
+              <li>Cloud: Azure or AWS — EU (Frankfurt) region for GDPR</li>
+              <li>Real-time messaging via WebSockets</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Data Model &amp; Security</div>
+            <ul>
+              <li>8 entities: User, Profile, Match, Chat, Media, Subscription, Report, Notification</li>
+              <li>End-to-end message encryption</li>
+              <li>Authentication: JWT with secure refresh token rotation</li>
+              <li>GDPR architecture: data minimisation, right to erasure, audit trails</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">AI Architecture</div>
+            <ul>
+              <li>Recommendation engine: collaborative + content-based filtering</li>
+              <li>Compatibility scoring model with explainability layer</li>
+              <li>AI content moderation: images, text, behavioural signals</li>
+              <li>Image verification and deepfake detection</li>
+              <li>Conversation assistant (v2.0 roadmap item)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-VII">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase VII</div>
+            <div class="pm-name">Development</div>
+            <div class="pm-span">Weeks 13–36 &nbsp;·&nbsp; 4 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">24 weeks of engineering — six structured sprints across mobile, backend, and AI</div>
+            <div class="ps-desc">The longest and most resource-intensive phase. Six four-week sprints deliver the complete MVP: mobile apps, backend APIs, AI integration, CI/CD pipeline, and production infrastructure. This requires sustained, uninterrupted engineering capacity.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">22–24 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Sprints</span><span class="pm-val">6 × 4 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Engineers</span><span class="pm-val">3–5 required</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Sprint Plan</div>
+            <ul>
+              <li>Sprint 1: Auth, identity verification, user profile, onboarding</li>
+              <li>Sprint 2: Discovery engine, compatibility scoring, like / pass, matching</li>
+              <li>Sprint 3: Real-time chat, notifications, media upload</li>
+              <li>Sprint 4: AI integration, moderation pipeline, date planner</li>
+              <li>Sprint 5: Subscription and payment flows, premium features</li>
+              <li>Sprint 6: Performance, security hardening, pre-launch polish</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Engineering Standards</div>
+            <ul>
+              <li>Clean architecture, domain-driven design principles</li>
+              <li>90%+ unit test coverage on all core business logic</li>
+              <li>Code review required for every pull request</li>
+              <li>API documentation (OpenAPI), architecture decision records</li>
+              <li>Feature flags enabling staged and risk-free rollout</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">CI/CD &amp; Infrastructure</div>
+            <ul>
+              <li>GitHub + Azure DevOps automated pipeline</li>
+              <li>Automated tests triggered on every commit</li>
+              <li>Docker containers, Kubernetes orchestration</li>
+              <li>Monitoring: Datadog dashboards, alerting</li>
+              <li>Auto-scaling configured ahead of launch traffic spikes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-VIII">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase VIII</div>
+            <div class="pm-name">Testing &amp; QA</div>
+            <div class="pm-span">Weeks 30–42 &nbsp;·&nbsp; 4 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Security, performance, and beta validation — non-negotiable for a platform handling sensitive personal data</div>
+            <div class="ps-desc">A dating platform stores photos, location data, relationship status, and private conversations. Security and privacy testing are mandatory. A data breach or GDPR violation post-launch carries legal, financial, and reputational consequences that cannot be undone.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">10–12 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Beta Users</span><span class="pm-val">5,500 target</span></div>
+            <div class="pm-item"><span class="pm-key">Security</span><span class="pm-val">External PenTest</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Functional Testing</div>
+            <ul>
+              <li>Automated unit tests across all services (continuous)</li>
+              <li>Integration tests across all API and service boundaries</li>
+              <li>End-to-end test suites covering every user journey</li>
+              <li>Cross-device and cross-platform coverage matrix</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Performance &amp; Security</div>
+            <ul>
+              <li>Load testing at 10k, 50k, and 100k concurrent users</li>
+              <li>External penetration test by qualified third party</li>
+              <li>OWASP Top 10 vulnerability assessment</li>
+              <li>GDPR compliance audit with DPO formal sign-off</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Beta Programme</div>
+            <ul>
+              <li>Closed beta: 500 invited users from target segment (4 weeks)</li>
+              <li>Open beta: 5,000 via waitlist campaign (4 weeks)</li>
+              <li>In-app NPS surveys and structured feedback collection</li>
+              <li>Analytics-driven iteration before public launch</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-IX">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase IX</div>
+            <div class="pm-name">Business &amp; Legal</div>
+            <div class="pm-span">Weeks 6–16 &nbsp;·&nbsp; 3 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Revenue model, financial projections, and full EU legal compliance framework</div>
+            <div class="ps-desc">Dating apps face strict European regulation. GDPR, the Digital Services Act, age verification obligations, and content moderation requirements must be built in from the beginning — not retrofitted. Legal work runs in parallel with product development, not as an afterthought.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">8–10 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Legal Docs</span><span class="pm-val">6+ required</span></div>
+            <div class="pm-item"><span class="pm-key">Revenue Model</span><span class="pm-val">Freemium</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Revenue Model</div>
+            <ul>
+              <li>Free tier: limited daily picks, core features</li>
+              <li>Aura Premium (€14.99/mo): unlimited picks, boosts, read receipts, travel mode</li>
+              <li>Aura Gold (€29.99/mo): AI compatibility reports, priority matching, concierge</li>
+              <li>One-time identity verification badge (trust signal)</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Financial Plan</div>
+            <ul>
+              <li>Development investment (Y0): €280–480k</li>
+              <li>Operational costs (Y1): €60–120k cloud and team</li>
+              <li>User acquisition budget (Y1): €80–150k</li>
+              <li>Revenue projection: €400k (Y1) → €1.8M (Y2)</li>
+              <li>Break-even horizon: months 18–24 post-launch</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Legal &amp; Compliance</div>
+            <ul>
+              <li>GDPR: DPA agreements, lawful basis documentation, DPO appointment</li>
+              <li>Privacy Policy and Terms of Service under German law</li>
+              <li>Digital Services Act (DSA 2024) obligations</li>
+              <li>Mandatory age verification for EU market</li>
+              <li>Content moderation policy and user appeal process</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-X">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase X</div>
+            <div class="pm-name">Go-to-Market</div>
+            <div class="pm-span">Weeks 36–44 &nbsp;·&nbsp; 4 workstreams</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Germany-first launch — brand, marketing, and a phased city-by-city rollout</div>
+            <div class="ps-desc">The product's success depends equally on distribution quality. This phase builds the brand, executes a targeted marketing strategy for the 35–50 segment, and manages a staged launch beginning in Berlin, Munich, and Hamburg before going national.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Duration</span><span class="pm-val">8 weeks</span></div>
+            <div class="pm-item"><span class="pm-key">Launch</span><span class="pm-val">Germany 🇩🇪</span></div>
+            <div class="pm-item"><span class="pm-key">Year 2</span><span class="pm-val">EU Expansion</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Brand Identity</div>
+            <ul>
+              <li>Trademark check and brand name finalisation</li>
+              <li>Logo, visual identity system, and brand guidelines</li>
+              <li>App Store assets: screenshots, preview video, keyword strategy</li>
+              <li>Marketing website design and copywriting</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Marketing Strategy</div>
+            <ul>
+              <li>SEO content strategy targeting 35–50 relationship intent queries</li>
+              <li>LinkedIn and Instagram presence (primary channels for this age group)</li>
+              <li>Influencer partnerships: relationship and lifestyle content creators</li>
+              <li>PR campaign: quality press coverage, credibility-first positioning</li>
+              <li>Referral programme: incentivised peer invitation</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Phased Launch</div>
+            <ul>
+              <li>Alpha: internal and invited (Week 38)</li>
+              <li>Closed beta: 500 from waitlist (Weeks 39–40)</li>
+              <li>Soft launch: Berlin, Munich, Hamburg (Week 42)</li>
+              <li>National DE launch (Week 44)</li>
+              <li>EU rollout: Austria, Switzerland, Netherlands (Year 2)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block ph-XI">
+        <div class="phase-header">
+          <div class="phase-meta">
+            <div class="pm-badge">Phase XI</div>
+            <div class="pm-name">Continuous Improvement</div>
+            <div class="pm-span">Ongoing from Week 44</div>
+          </div>
+          <div class="phase-summary">
+            <div class="ps-headline">Data-driven iteration toward a 5–10 year product vision</div>
+            <div class="ps-desc">Post-launch is the beginning, not the end. Analytics, A/B testing, user interviews, and iterative development become permanent activities. The roadmap from v1.0 to v2.0 evolves the product toward AI relationship coaching, event-based experiences, and an expanded ecosystem.</div>
+          </div>
+          <div class="phase-metrics">
+            <div class="pm-item"><span class="pm-key">Cadence</span><span class="pm-val">2-week sprints</span></div>
+            <div class="pm-item"><span class="pm-key">v2.0 Target</span><span class="pm-val">Month 18</span></div>
+            <div class="pm-item"><span class="pm-key">Horizon</span><span class="pm-val">5–10 years</span></div>
+          </div>
+        </div>
+        <div class="phase-detail">
+          <div class="detail-col">
+            <div class="dc-title">Feedback &amp; Analytics</div>
+            <ul>
+              <li>In-app surveys and quarterly NPS measurement</li>
+              <li>Funnel analysis: registration → first match → subscription</li>
+              <li>Heatmaps, session recordings, and feature adoption dashboards</li>
+              <li>Support ticket categorisation and triage</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Roadmap Milestones</div>
+            <ul>
+              <li>v1.1–v1.3: Performance and AI recommendation improvements</li>
+              <li>v2.0: Relationship coach, video profiles, advanced privacy</li>
+              <li>v3.0: Event-based dating, concierge matching</li>
+              <li>v4.0: Community features, full internationalisation</li>
+            </ul>
+          </div>
+          <div class="detail-col">
+            <div class="dc-title">Long-Term Vision (5–10 years)</div>
+            <ul>
+              <li>AI relationship coaching post-match</li>
+              <li>Curated real-world event experiences for the 35–50 cohort</li>
+              <li>Matchmaking concierge service (high-value premium tier)</li>
+              <li>EU-wide platform with localised market approaches</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WHAT SUCCESS REQUIRES -->
+  <div class="section">
+    <div class="section-label">What Success Requires</div>
+    <div class="section-heading">Conditions for delivering this project to the standard it demands</div>
+
+    <div class="callout callout-blue">
+      <h3>Strategic significance</h3>
+      <p>This is a full product development initiative — not an internal tool or a prototype. It spans ten professional disciplines, requires sustained engineering effort across 24 weeks, legal counsel, professional UX design, and a structured market launch. The plan outlined here is realistic if the right conditions are in place. The following summarises what those conditions look like in practice.</p>
+    </div>
+
+    <div class="resource-grid">
+      <div class="resource-card">
+        <div class="rc-header" style="background: #1e3a5f;">
+          Dedicated Time
+        </div>
+        <div class="rc-body">
+          <div class="rc-role">Calendar Duration</div>
+          <div class="rc-qty">~44 weeks</div>
+          <div class="rc-note">The plan is structured so that parallel phases reduce calendar time — but the total person-hours involved are estimated at 1,200–1,800 across all disciplines. This requires protected, focused working time — not marginal hours around other commitments.</div>
+          <ul class="rc-tasks">
+            <li>Dedicated blocks for deep work: architecture, design, development</li>
+            <li>Regular stakeholder review points at phase transitions</li>
+            <li>Buffer built in for iteration cycles and unexpected complexity</li>
+            <li>Milestone-based progress tracking throughout</li>
+          </ul>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="rc-header" style="background: #1e40af;">
+          Team Composition
+        </div>
+        <div class="rc-body">
+          <div class="rc-role">Roles Required</div>
+          <div class="rc-qty">3–6 people</div>
+          <div class="rc-note">Core roles can be covered through a combination of in-house capacity, contractors, and specialist freelancers. Not all roles are required simultaneously — the Gantt determines when each is needed.</div>
+          <ul class="rc-tasks">
+            <li>Product lead / strategist — continuous from Week 1</li>
+            <li>UX/UI designer — Phases IV and IX</li>
+            <li>Full-stack engineers ×2–3 — Phase VI (Weeks 13–36)</li>
+            <li>Legal counsel, GDPR specialist — Phase VIII</li>
+            <li>Marketing manager — Phase IX</li>
+            <li>QA and security specialist — Phase VII</li>
+          </ul>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="rc-header" style="background: #075985;">
+          Investment Indicative
+        </div>
+        <div class="rc-body">
+          <div class="rc-role">Total Year 0–1</div>
+          <div class="rc-qty">€350–650k</div>
+          <div class="rc-note">The range reflects build vs. outsource decisions and team structure. A lean MVP approach with a focused team sits toward the lower end. Revenue from beta subscriptions can begin offsetting costs before full launch.</div>
+          <ul class="rc-tasks">
+            <li>Development (engineering team): €200–350k</li>
+            <li>Design (UX/UI + brand identity): €30–60k</li>
+            <li>Legal and compliance: €20–40k</li>
+            <li>Infrastructure, Year 1: €20–40k</li>
+            <li>Marketing and launch: €80–150k</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>
+    <strong>Aura — Dating Platform</strong> &nbsp;·&nbsp; Executive Briefing &nbsp;·&nbsp; High-Level Project Plan
+  </div>
+  <div>Confidential &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; Version 1.0</div>
+</footer>
+
+</body>
+</html>
