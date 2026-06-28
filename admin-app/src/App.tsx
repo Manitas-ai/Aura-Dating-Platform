@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage'
 import MembersPage   from './pages/MembersPage'
 import MatchesPage   from './pages/MatchesPage'
 import MessagesPage  from './pages/MessagesPage'
+import FeedbackPage  from './pages/FeedbackPage'
 
 export default function App() {
   const { authed } = useAdminAuth()
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="members"     element={<MembersPage />} />
         <Route path="matches"     element={<MatchesPage />} />
         <Route path="messages"    element={<MessagesPage />} />
+        <Route path="feedback"    element={<FeedbackPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

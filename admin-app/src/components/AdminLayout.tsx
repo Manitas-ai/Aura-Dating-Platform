@@ -1,12 +1,13 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, Heart, MessageCircle, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, Heart, MessageCircle, LogOut, MessageSquarePlus } from 'lucide-react'
 import { useAdminAuth } from '../context/AuthContext'
 
 const NAV = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/members',   icon: Users,           label: 'Members'   },
-  { to: '/matches',   icon: Heart,           label: 'Flirts'    },
-  { to: '/messages',  icon: MessageCircle,   label: 'Messages'  },
+  { to: '/dashboard', icon: LayoutDashboard,   label: 'Dashboard' },
+  { to: '/members',   icon: Users,             label: 'Members'   },
+  { to: '/matches',   icon: Heart,             label: 'Flirts'    },
+  { to: '/messages',  icon: MessageCircle,     label: 'Messages'  },
+  { to: '/feedback',  icon: MessageSquarePlus, label: 'Feedback'  },
 ]
 
 export default function AdminLayout() {

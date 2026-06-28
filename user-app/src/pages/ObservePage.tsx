@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { db } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { Profile, FlirtProposal } from '../types'
+import ProfileDetailModal from '../components/ProfileDetailModal'
 
 interface ObservedEntry {
   profile:   Profile
@@ -10,12 +12,14 @@ interface ObservedEntry {
 
 export default function ObservePage() {
   const { profile } = useAuth()
+  const navigate    = useNavigate()
 
-  const [entries,  setEntries]  = useState<ObservedEntry[]>([])
-  const [loading,  setLoading]  = useState(true)
-  const [proposing, setProposing] = useState<string | null>(null) // profile id being proposed to
-  const [propMsg,   setPropMsg]  = useState('')
-  const [sending,   setSending]  = useState(false)
+  const [entries,    setEntries]    = useState<ObservedEntry[]>([])
+  const [loading,    setLoading]    = useState(true)
+  const [proposing,  setProposing]  = useState<string | null>(null)
+  const [propMsg,    setPropMsg]    = useState('')
+  const [sending,    setSending]    = useState(false)
+  const [selected,   setSelected]   = useState<Profile | null>(null)
 
   useEffect(() => { load() }, [])
 
@@ -106,20 +110,29 @@ export default function ObservePage() {
             return (
               <div key={p.id} className="bg-aura-surface border border-aura-border/60 rounded-2xl p-4">
                 <div className="flex items-start gap-4">
-                  {/* Avatar */}
-                  <div className="flex-shrink-0">
+                  {/* Avatar — clickable to open profile */}
+                  <button
+                    className="flex-shrink-0 focus:outline-none"
+                    onClick={() => setSelected(p)}
+                    title="View profile"
+                  >
                     {p.photo_url ? (
-                      <img src={p.photo_url} alt="" className="w-12 h-12 rounded-full object-cover border border-aura-border" />
+                      <img src={p.photo_url} alt="" className="w-12 h-12 rounded-full object-cover border border-aura-border hover:ring-2 hover:ring-aura-gold/40 transition-all" />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-aura-elevated border border-aura-border flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-aura-elevated border border-aura-border flex items-center justify-center hover:ring-2 hover:ring-aura-gold/40 transition-all">
                         <span className="font-serif text-lg text-aura-muted">{p.username[0].toUpperCase()}</span>
                       </div>
                     )}
-                  </div>
+                  </button>
 
-                  {/* Info */}
+                  {/* Info — username also clickable */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-aura-text">{p.username}</p>
+                    <button
+                      onClick={() => setSelected(p)}
+                      className="text-sm font-medium text-aura-text hover:text-aura-gold transition-colors"
+                    >
+                      {p.username}
+                    </button>
                     <p className="text-xs text-aura-muted font-light">
                       {[p.age_group, p.region].filter(Boolean).join(' · ')}
                     </p>
@@ -199,6 +212,17 @@ export default function ObservePage() {
           })}
         </div>
       )}
+
+      {selected && (
+        <ProfileDetailModal
+          profile={selected}
+          observed={true}
+          onObserve={() => {}}
+          onGoObserve={() => setSelected(null)}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </div>
   )
 }
+

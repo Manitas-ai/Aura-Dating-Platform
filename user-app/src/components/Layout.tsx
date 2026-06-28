@@ -1,17 +1,19 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
-import { Compass, Eye, Flame, User } from 'lucide-react'
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Compass, Eye, Flame, User, LogOut, HelpCircle, MessageSquarePlus } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const NAV = [
-  { to: '/discover', icon: Compass, label: 'Discover' },
-  { to: '/observe',  icon: Eye,     label: 'Observe'  },
-  { to: '/flirts',   icon: Flame,   label: 'Flirts'   },
-  { to: '/profile',  icon: User,    label: 'Profile'  },
+  { to: '/discover',  icon: Compass,           label: 'Discover'  },
+  { to: '/observe',   icon: Eye,               label: 'Observe'   },
+  { to: '/flirts',    icon: Flame,             label: 'Flirts'    },
+  { to: '/feedback',  icon: MessageSquarePlus, label: 'Feedback'  },
+  { to: '/profile',   icon: User,              label: 'Profile'   },
 ]
 
 export default function Layout() {
-  const { profile } = useAuth()
+  const { profile, logout } = useAuth()
   const loc = useLocation()
+  const navigate = useNavigate()
 
   const active = (to: string) =>
     to === '/flirts'
@@ -45,6 +47,16 @@ export default function Layout() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <NavLink
+            to="/guide"
+            title="How Aura works"
+            className={({ isActive }) =>
+              `p-1.5 rounded-full transition-colors duration-200 ` +
+              (isActive ? 'text-aura-gold' : 'text-aura-subtle hover:text-aura-muted')
+            }
+          >
+            <HelpCircle size={16} strokeWidth={1.5} />
+          </NavLink>
           {profile?.photo_url ? (
             <img
               src={profile.photo_url}
@@ -57,6 +69,13 @@ export default function Layout() {
             </div>
           )}
           <span className="text-sm text-aura-muted font-light">{profile?.username}</span>
+          <button
+            onClick={() => { logout(); navigate('/login') }}
+            title="Sign out"
+            className="ml-1 p-1.5 rounded-full text-aura-subtle hover:text-red-400 hover:bg-aura-elevated transition-colors duration-200"
+          >
+            <LogOut size={15} strokeWidth={1.5} />
+          </button>
         </div>
       </header>
 

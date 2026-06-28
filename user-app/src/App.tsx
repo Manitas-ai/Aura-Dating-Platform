@@ -6,7 +6,10 @@ import RegisterPage  from './pages/RegisterPage'
 import DiscoverPage  from './pages/DiscoverPage'
 import ObservePage   from './pages/ObservePage'
 import FlirtsPage    from './pages/FlirtsPage'
-import MyProfilePage from './pages/MyProfilePage'
+import MyProfilePage          from './pages/MyProfilePage'
+import QuestionnaireEditPage  from './pages/QuestionnaireEditPage'
+import HowToGuidePage         from './pages/HowToGuidePage'
+import FeedbackPage           from './pages/FeedbackPage'
 
 export default function App() {
   const { profile, loading } = useAuth()
@@ -33,7 +36,10 @@ export default function App() {
         <Route path="observe"    element={<ObservePage />} />
         <Route path="flirts"     element={<FlirtsPage />} />
         <Route path="flirts/:id" element={<FlirtsPage />} />
-        <Route path="profile"    element={<MyProfilePage />} />
+        <Route path="profile"        element={<MyProfilePage />} />
+        <Route path="questionnaire"  element={<QuestionnaireEditPage />} />
+        <Route path="guide"          element={<HowToGuidePage />} />
+        <Route path="feedback"       element={<FeedbackPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/discover" replace />} />
     </Routes>
