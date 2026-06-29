@@ -33,6 +33,8 @@ export default function LoginPage() {
       return
     }
 
+    await db.from('user_logins').insert({ username: data.username })
+
     login(data as Profile)
     navigate('/discover')
   }
