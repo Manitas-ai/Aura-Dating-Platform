@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Dating App – Beginner's Guide to the Codebase</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f0f1a; color: #e8e4de; line-height: 1.7; font-size: 15px; }
+
+  header { background: linear-gradient(135deg, #1a1a2e, #0d0d18); padding: 40px 40px 30px; border-bottom: 2px solid #c9a96e; }
+  header h1 { font-size: 2rem; color: #c9a96e; margin-bottom: 8px; }
+  header p { color: #9b96a8; font-size: 1rem; }
+
+  nav { background: #111116; padding: 12px 40px; display: flex; gap: 20px; flex-wrap: wrap; border-bottom: 1px solid #242332; position: sticky; top: 0; z-index: 100; }
+  nav a { color: #c9a96e; text-decoration: none; font-size: 13px; padding: 4px 10px; border-radius: 4px; }
+  nav a:hover { background: #242332; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 30px; }
+
+  h2 { font-size: 1.4rem; color: #c9a96e; margin: 50px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #242332; }
+  h3 { font-size: 1.05rem; color: #e8d5a3; margin: 24px 0 10px; }
+  p { color: #b8b4c4; margin-bottom: 10px; }
+
+  /* CONCEPT BOXES */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin: 20px 0; }
+  .concept-box { background: #18181f; border: 1px solid #242332; border-radius: 10px; padding: 20px; }
+  .concept-box .icon { font-size: 2rem; margin-bottom: 10px; }
+  .concept-box h3 { margin-top: 0; font-size: 1rem; color: #c9a96e; }
+  .concept-box p { font-size: 13px; color: #9b96a8; margin: 0; }
+
+  /* TECH PILLS */
+  .tech { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin: 2px; }
+  .tech.react    { background: #1e3a5f; color: #61dafb; border: 1px solid #61dafb44; }
+  .tech.ts       { background: #1e3050; color: #3b82f6; border: 1px solid #3b82f644; }
+  .tech.tailwind { background: #0d3040; color: #38bdf8; border: 1px solid #38bdf844; }
+  .tech.supabase { background: #0d3030; color: #3ecf8e; border: 1px solid #3ecf8e44; }
+  .tech.vite     { background: #2a1a40; color: #a78bfa; border: 1px solid #a78bfa44; }
+  .tech.sql      { background: #3a2010; color: #fb923c; border: 1px solid #fb923c44; }
+  .tech.html     { background: #3a1a10; color: #f97316; border: 1px solid #f9731644; }
+
+  /* FRONTEND/BACKEND BADGE */
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 6px; vertical-align: middle; }
+  .fe { background: #1e3a5f; color: #61dafb; }
+  .be { background: #1e3020; color: #4ade80; }
+  .both { background: #3a2a10; color: #fbbf24; }
+
+  /* FILE TREE */
+  .tree { background: #111116; border: 1px solid #242332; border-radius: 10px; padding: 24px; font-family: 'Consolas', monospace; font-size: 13px; line-height: 2; }
+  .tree .folder { color: #c9a96e; font-weight: bold; cursor: pointer; user-select: none; }
+  .tree .folder:hover { color: #e8d5a3; }
+  .tree .file { color: #b8b4c4; }
+  .tree .file.important { color: #e8d5a3; }
+  .tree .comment { color: #4a4860; margin-left: 6px; font-size: 12px; }
+  .tree .indent1 { padding-left: 20px; }
+  .tree .indent2 { padding-left: 40px; }
+  .tree .indent3 { padding-left: 60px; }
+  .tree .indent4 { padding-left: 80px; }
+
+  /* FILE CARDS */
+  .file-cards { display: flex; flex-direction: column; gap: 10px; }
+  .file-card { background: #18181f; border: 1px solid #242332; border-radius: 8px; padding: 16px 20px; }
+  .file-card:hover { border-color: #c9a96e44; }
+  .file-card .filename { font-family: 'Consolas', monospace; color: #e8d5a3; font-size: 14px; font-weight: bold; }
+  .file-card .tags { margin: 6px 0; }
+  .file-card .desc { font-size: 13px; color: #9b96a8; }
+  .file-card .detail { font-size: 13px; color: #7a7688; margin-top: 6px; display: none; }
+  .file-card:hover .detail { display: block; }
+
+  /* ANALOGY BOX */
+  .analogy { background: #1a1a10; border-left: 4px solid #c9a96e; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .analogy .label { font-size: 11px; color: #c9a96e; font-weight: bold; letter-spacing: 1px; margin-bottom: 6px; }
+  .analogy p { color: #d4cfa8; font-size: 13px; margin: 0; }
+
+  /* HOW IT WORKS FLOW */
+  .flow { display: flex; flex-wrap: wrap; gap: 0; margin: 20px 0; align-items: center; }
+  .flow-step { background: #18181f; border: 1px solid #242332; border-radius: 8px; padding: 14px 18px; text-align: center; min-width: 120px; }
+  .flow-step .num { font-size: 11px; color: #c9a96e; font-weight: bold; }
+  .flow-step .label { font-size: 13px; color: #e8d5a3; margin-top: 4px; }
+  .flow-arrow { color: #4a4860; font-size: 20px; padding: 0 8px; }
+
+  /* SUPABASE MAP */
+  .db-table { background: #0d1a14; border: 1px solid #3ecf8e44; border-radius: 8px; padding: 14px 16px; margin: 8px 0; }
+  .db-table .tname { font-family: 'Consolas', monospace; color: #3ecf8e; font-weight: bold; font-size: 14px; }
+  .db-table .tdesc { font-size: 13px; color: #7a9a8a; margin-top: 4px; }
+  .db-table .twho { font-size: 12px; color: #4a7a64; margin-top: 4px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid #242332; margin: 40px 0; }
+
+  /* TIP BOX */
+  .tip { background: #1a1a2e; border: 1px solid #3b82f644; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+  .tip .tip-label { font-size: 11px; color: #3b82f6; font-weight: bold; letter-spacing: 1px; margin-bottom: 6px; }
+  .tip p { font-size: 13px; color: #93c5fd; margin: 0; }
+
+  /* DATA FLOW */
+  .df-row { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+  .df-box { padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+  .df-browser { background: #1e3a5f; color: #61dafb; }
+  .df-react   { background: #1e3a5f; color: #61dafb; }
+  .df-supabase{ background: #0d3030; color: #3ecf8e; }
+  .df-db      { background: #3a2010; color: #fb923c; }
+  .df-arrow   { color: #4a4860; font-size: 18px; }
+  .df-label   { font-size: 12px; color: #4a4860; }
+
+  footer { text-align: center; padding: 30px; color: #4a4860; font-size: 12px; border-top: 1px solid #242332; margin-top: 60px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌀 Aura Dating App — Codebase Explained for Beginners</h1>
+  <p>A plain-English guide to every file, folder, and technology. No experience needed.</p>
+</header>
+
+<nav>
+  <a href="#big-picture">Big Picture</a>
+  <a href="#technologies">Technologies</a>
+  <a href="#fe-vs-be">Frontend vs Backend</a>
+  <a href="#tree">File Tree</a>
+  <a href="#user-app">User App Files</a>
+  <a href="#admin-app">Admin App Files</a>
+  <a href="#supabase">Supabase & Database</a>
+  <a href="#data-flow">How Data Flows</a>
+</nav>
+
+<main>
+
+<!-- ===================== BIG PICTURE ===================== -->
+<section id="big-picture">
+<h2>🗺️ The Big Picture — What Is This Project?</h2>
+
+<p>Aura is a dating app. Like Tinder, but more thoughtful — it is built on deep personality questionnaires, not just photos. The codebase is split into <strong>two separate apps</strong> that share one database.</p>
+
+<div class="concept-grid">
+  <div class="concept-box">
+    <div class="icon">👤</div>
+    <h3>User App</h3>
+    <p>What real users see. Browse profiles, send flirts, chat, manage your own profile. Lives in the <code>user-app/</code> folder.</p>
+  </div>
+  <div class="concept-box">
+    <div class="icon">🛠️</div>
+    <h3>Admin App</h3>
+    <p>What the owner/moderator sees. Dashboard stats, manage members, read messages, view feedback. Lives in the <code>admin-app/</code> folder.</p>
+  </div>
+  <div class="concept-box">
+    <div class="icon">🗄️</div>
+    <h3>Supabase (Database)</h3>
+    <p>The shared brain in the cloud. Stores all users, messages, photos, flirts. Both apps read and write to it.</p>
+  </div>
+  <div class="concept-box">
+    <div class="icon">📄</div>
+    <h3>setup.sql</h3>
+    <p>A script that creates the database structure and fills it with 10 test users to demo the app.</p>
+  </div>
+</div>
+
+<div class="analogy">
+  <div class="label">🏠 REAL WORLD ANALOGY</div>
+  <p>Think of a restaurant. The <strong>user-app</strong> is the dining room where customers eat. The <strong>admin-app</strong> is the manager's office. <strong>Supabase</strong> is the kitchen where all the food (data) is stored and prepared. Both rooms connect to the same kitchen.</p>
+</div>
+</section>
+
+<!-- ===================== TECHNOLOGIES ===================== -->
+<section id="technologies">
+<h2>🧰 The Technologies — What Are They?</h2>
+
+<div class="concept-grid">
+
+  <div class="concept-box">
+    <div class="icon">⚛️</div>
+    <h3><span class="tech react">React</span></h3>
+    <p>A JavaScript library for building user interfaces. Instead of writing one giant HTML page, you write small reusable <strong>components</strong> (like Lego bricks) that React assembles into a full page. Files end in <code>.tsx</code>.</p>
+  </div>
+
+  <div class="concept-box">
+    <div class="icon">🔷</div>
+    <h3><span class="tech ts">TypeScript</span></h3>
+    <p>JavaScript with "labels" on everything. Instead of a variable that could be anything, you say <em>"this must be a string"</em> or <em>"this must be a number"</em>. It catches mistakes before they become bugs. Files end in <code>.ts</code> or <code>.tsx</code>.</p>
+  </div>
+
+  <div class="concept-box">
+    <div class="icon">🎨</div>
+    <h3><span class="tech tailwind">Tailwind CSS</span></h3>
+    <p>A way to style your app by adding small class names directly in your HTML, like <code>bg-blue-500</code> for a blue background or <code>text-lg</code> for large text. No separate CSS files needed for most styling.</p>
+  </div>
+
+  <div class="concept-box">
+    <div class="icon">🗄️</div>
+    <h3><span class="tech supabase">Supabase</span></h3>
+    <p>A cloud database service. It gives you a PostgreSQL database, file storage (for photos), and an API — all in one. You connect to it from your React code using a tiny library.</p>
+  </div>
+
+  <div class="concept-box">
+    <div class="icon">⚡</div>
+    <h3><span class="tech vite">Vite</span></h3>
+    <p>The build tool. It takes all your TypeScript/React files and bundles them into plain HTML + JavaScript that a browser can understand. Also runs a fast local development server.</p>
+  </div>
+
+  <div class="concept-box">
+    <div class="icon">🔁</div>
+    <h3>React Router</h3>
+    <p>Makes the app feel like a multi-page website even though it's really one HTML file. When you click "Discover", it swaps the content without reloading the whole page. This is called a <strong>Single Page App (SPA)</strong>.</p>
+  </div>
+
+</div>
+
+<div class="analogy">
+  <div class="label">📚 HOW THEY WORK TOGETHER</div>
+  <p><strong>TypeScript</strong> is your language. <strong>React</strong> is your UI framework. <strong>Tailwind</strong> makes it look good. <strong>Vite</strong> compiles it all. <strong>Supabase</strong> stores the data. Think of TypeScript as the pen, React as the paper, Tailwind as the paintbrush, Vite as the printer, and Supabase as the filing cabinet.</p>
+</div>
+
+<div class="tip">
+  <div class="tip-label">💡 WHAT IS A .tsx FILE?</div>
+  <p>It stands for TypeScript + JSX. JSX lets you write HTML-like code inside JavaScript. So a .tsx file is TypeScript code that contains your component logic AND its HTML structure in the same file.</p>
+</div>
+</section>
+
+<!-- ===================== FRONTEND VS BACKEND ===================== -->
+<section id="fe-vs-be">
+<h2>🖥️ Frontend vs Backend — What's the Difference?</h2>
+
+<div class="concept-grid">
+  <div class="concept-box">
+    <div class="icon">🖥️</div>
+    <h3>Frontend <span class="badge fe">FE</span></h3>
+    <p>Everything the user <strong>sees and clicks</strong>. Runs in the browser on the user's device. All the React, TypeScript, and Tailwind files are frontend. They create the buttons, forms, colours, layouts.</p>
+  </div>
+  <div class="concept-box">
+    <div class="icon">🖧</div>
+    <h3>Backend <span class="badge be">BE</span></h3>
+    <p>Everything that <strong>stores and processes data</strong>. Runs on a server, not in the browser. In this project, the backend is entirely <strong>Supabase</strong> — the database tables, the photo storage, and the SQL queries.</p>
+  </div>
+</div>
+
+<div class="analogy">
+  <div class="label">🍽️ REAL WORLD ANALOGY</div>
+  <p>The <strong>frontend</strong> is the menu and the waiter. It's what you see and interact with. The <strong>backend</strong> is the kitchen — you never see it, but it's where the food (data) actually gets made and stored. When you click "Send Message", the frontend (waiter) takes your order to the backend (kitchen) which saves it to the database, then brings back a confirmation.</p>
+</div>
+
+<div class="tip">
+  <div class="tip-label">💡 THIS PROJECT HAS NO CUSTOM BACKEND SERVER</div>
+  <p>There's no Node.js or Python server written here. Supabase provides the backend as a service. The React app talks directly to Supabase using its JavaScript library. This is common for small apps and prototypes.</p>
+</div>
+</section>
+
+<!-- ===================== FILE TREE ===================== -->
+<section id="tree">
+<h2>🌳 The Full File Tree</h2>
+<p>Hover over a file name to see what it does. Folders in <span style="color:#c9a96e">gold</span> are folders.</p>
+
+<div class="tree">
+
+  <div><span class="folder">📁 aura-dating-app/</span> <span class="comment">← the whole project lives here</span></div>
+
+  <div class="indent1"><span class="folder">📁 user-app/</span> <span class="comment">← the app real users log into</span></div>
+  <div class="indent2"><span class="folder">📁 src/</span> <span class="comment">← all source code you write goes here</span></div>
+  <div class="indent3 file important">main.tsx <span class="comment">← entry point: starts the React app</span></div>
+  <div class="indent3 file important">App.tsx <span class="comment">← defines all the URL routes (pages)</span></div>
+  <div class="indent3 file">index.css <span class="comment">← global styles + Tailwind setup</span></div>
+  <div class="indent3"><span class="folder">📁 pages/</span> <span class="comment">← one file per screen/page</span></div>
+  <div class="indent4 file important">LoginPage.tsx <span class="comment">← username + password login form</span></div>
+  <div class="indent4 file important">RegisterPage.tsx <span class="comment">← 10-step signup with questionnaire</span></div>
+  <div class="indent4 file important">DiscoverPage.tsx <span class="comment">← browse other users, add filters</span></div>
+  <div class="indent4 file important">ObservePage.tsx <span class="comment">← your private watchlist</span></div>
+  <div class="indent4 file important">FlirtsPage.tsx <span class="comment">← accepted connections + chat</span></div>
+  <div class="indent4 file important">MyProfilePage.tsx <span class="comment">← edit your own profile + photos</span></div>
+  <div class="indent4 file">QuestionnaireEditPage.tsx <span class="comment">← edit your 7-chapter questionnaire</span></div>
+  <div class="indent4 file">HowToGuidePage.tsx <span class="comment">← the "how to use the app" guide</span></div>
+  <div class="indent4 file">FeedbackPage.tsx <span class="comment">← submit feedback with a rating</span></div>
+  <div class="indent3"><span class="folder">📁 components/</span> <span class="comment">← reusable UI building blocks</span></div>
+  <div class="indent4 file important">Layout.tsx <span class="comment">← top nav (desktop) + bottom nav (mobile)</span></div>
+  <div class="indent4 file">ProfileDetailModal.tsx <span class="comment">← popup showing full profile details</span></div>
+  <div class="indent3"><span class="folder">📁 context/</span> <span class="comment">← shared state available to all components</span></div>
+  <div class="indent4 file important">AuthContext.tsx <span class="comment">← stores who is logged in, login/logout logic</span></div>
+  <div class="indent3"><span class="folder">📁 lib/</span> <span class="comment">← utility files and connections</span></div>
+  <div class="indent4 file important">supabase.ts <span class="comment">← 🔌 connects to Supabase database</span></div>
+  <div class="indent4 file">constants.ts <span class="comment">← all dropdown options (regions, interests…)</span></div>
+  <div class="indent3"><span class="folder">📁 types/</span> <span class="comment">← TypeScript "shape" definitions</span></div>
+  <div class="indent4 file important">index.ts <span class="comment">← defines what a Profile, Message, Flirt looks like</span></div>
+  <div class="indent2"><span class="folder">📁 dist/</span> <span class="comment">← ⚠️ auto-generated build output (don't edit)</span></div>
+  <div class="indent2"><span class="folder">📁 public/</span> <span class="comment">← static files (not processed by Vite)</span></div>
+  <div class="indent2 file">index.html <span class="comment">← the single HTML shell the app runs inside</span></div>
+  <div class="indent2 file">package.json <span class="comment">← lists all dependencies (React, Supabase…)</span></div>
+  <div class="indent2 file">tailwind.config.js <span class="comment">← custom colours and fonts for Tailwind</span></div>
+  <div class="indent2 file">vite.config.ts <span class="comment">← Vite bundler settings</span></div>
+  <div class="indent2 file">tsconfig.json <span class="comment">← TypeScript compiler settings</span></div>
+  <div class="indent2 file">netlify.toml <span class="comment">← deployment settings for Netlify hosting</span></div>
+  <div class="indent2 file">postcss.config.js <span class="comment">← links PostCSS and Tailwind together</span></div>
+
+  <div style="margin-top:12px"></div>
+
+  <div class="indent1"><span class="folder">📁 admin-app/</span> <span class="comment">← the app the site owner uses to moderate</span></div>
+  <div class="indent2"><span class="folder">📁 src/</span></div>
+  <div class="indent3 file important">main.tsx <span class="comment">← entry point for admin app</span></div>
+  <div class="indent3 file important">App.tsx <span class="comment">← admin routes (dashboard, members…)</span></div>
+  <div class="indent3 file">index.css <span class="comment">← admin global styles</span></div>
+  <div class="indent3"><span class="folder">📁 pages/</span></div>
+  <div class="indent4 file important">DashboardPage.tsx <span class="comment">← KPI cards: total members, messages sent…</span></div>
+  <div class="indent4 file important">MembersPage.tsx <span class="comment">← view, edit, suspend, delete users</span></div>
+  <div class="indent4 file">MatchesPage.tsx <span class="comment">← view all mutual flirt connections</span></div>
+  <div class="indent4 file">MessagesPage.tsx <span class="comment">← read and moderate all messages</span></div>
+  <div class="indent4 file">FeedbackPage.tsx <span class="comment">← read user feedback submissions</span></div>
+  <div class="indent4 file">UserLoginsPage.tsx <span class="comment">← who logged in and when</span></div>
+  <div class="indent4 file">LoginPage.tsx <span class="comment">← password gate (hardcoded: aura2024)</span></div>
+  <div class="indent3"><span class="folder">📁 components/</span></div>
+  <div class="indent4 file important">AdminLayout.tsx <span class="comment">← sidebar with navigation links</span></div>
+  <div class="indent3"><span class="folder">📁 context/</span></div>
+  <div class="indent4 file important">AuthContext.tsx <span class="comment">← stores admin login state in localStorage</span></div>
+  <div class="indent3"><span class="folder">📁 lib/</span></div>
+  <div class="indent4 file important">supabase.ts <span class="comment">← 🔌 same Supabase connection as user-app</span></div>
+  <div class="indent3"><span class="folder">📁 types/</span></div>
+  <div class="indent4 file">index.ts <span class="comment">← admin TypeScript type definitions</span></div>
+  <div class="indent2 file">package.json <span class="comment">← admin app dependencies</span></div>
+  <div class="indent2 file">tailwind.config.js <span class="comment">← same custom colours</span></div>
+  <div class="indent2 file">netlify.toml <span class="comment">← deploys admin to Netlify</span></div>
+
+  <div style="margin-top:12px"></div>
+
+  <div class="indent1 file important" style="color:#3ecf8e">setup.sql <span class="comment" style="color:#1e5a3a">← 🗄️ BACKEND: creates ALL database tables + 10 test users</span></div>
+  <div class="indent1 file" style="color:#9b96a8">dating-app-spec.md <span class="comment">← developer specification document</span></div>
+  <div class="indent1 file" style="color:#9b96a8">.gitignore <span class="comment">← tells Git what NOT to save (passwords, node_modules…)</span></div>
+  <div class="indent1 file" style="color:#9b96a8">*.html files <span class="comment">← standalone documentation pages (overview, market map…)</span></div>
+
+</div>
+</section>
+
+<!-- ===================== USER APP FILES ===================== -->
+<section id="user-app">
+<h2>👤 User App — File by File</h2>
+<p>These are the key files in <code>user-app/src/</code>. <strong>Hover</strong> over any card to see more detail.</p>
+
+<div class="file-cards">
+
+  <div class="file-card">
+    <div class="filename">main.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech ts">TypeScript</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The very first file that runs. It finds the <code>&lt;div id="root"&gt;</code> in index.html and injects the whole React app into it. Also wraps the app in <code>AuthProvider</code> (so all pages know who is logged in) and <code>BrowserRouter</code> (so navigation works).</div>
+    <div class="detail">Think of it as the "light switch" — flipping it on starts everything. You almost never need to edit this file.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">App.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The <strong>router</strong>. It maps URL paths to page components. <code>/discover</code> → DiscoverPage, <code>/flirts</code> → FlirtsPage, etc. Also handles redirects: if you are not logged in and try to visit <code>/discover</code>, it sends you to <code>/login</code>.</div>
+    <div class="detail">Uses React Router v6. The <code>&lt;Route&gt;</code> tags are like a table of contents for the app.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">index.css</div>
+    <div class="tags"><span class="tech tailwind">Tailwind CSS</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">Global stylesheet. The top 3 lines (<code>@tailwind base/components/utilities</code>) activate Tailwind. Below that are custom CSS classes like <code>.btn-gold</code> and <code>.card</code> that are reused throughout the app. Also imports Google Fonts.</div>
+    <div class="detail">Tailwind generates hundreds of utility classes (bg-*, text-*, p-*, etc.) from these 3 lines. The custom classes at the bottom are shortcuts for commonly repeated groups of Tailwind classes.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">context/AuthContext.tsx</div>
+    <div class="tags"><span class="tech react">React Context</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc"><strong>The login memory of the app.</strong> After you log in, your profile data is saved here (and in localStorage). Any component in the app can then call <code>useAuth()</code> to know who is logged in — without having to pass it as props through every component manually.</div>
+    <div class="detail">React Context is like a global variable that all components can read. Without it, you'd have to pass "who is logged in" as a prop from App → Layout → Page → Component → SubComponent, which gets messy fast.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">lib/supabase.ts</div>
+    <div class="tags"><span class="tech supabase">Supabase</span> <span class="badge both">BRIDGE</span></div>
+    <div class="desc"><strong>The database connection.</strong> These ~5 lines of code create a connection to the Supabase cloud database using a URL and an API key. The result is exported as <code>db</code>, which every page imports to query the database.</div>
+    <div class="detail">Example usage in a page: <code>const { data } = await db.from('profiles').select('*')</code> — this reads all rows from the profiles table. The Supabase library handles all the HTTP requests behind the scenes.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">lib/constants.ts</div>
+    <div class="tags"><span class="tech ts">TypeScript</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">A large list of all the dropdown options used in questionnaires and filters — 32 DACH regions, age groups, lifestyle choices, diet options, and more. Centralised here so every page uses the same values.</div>
+    <div class="detail">Instead of typing "Bavaria" in 5 different places (and possibly making a typo), you define it once here and import it everywhere.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">types/index.ts</div>
+    <div class="tags"><span class="tech ts">TypeScript</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc"><strong>The blueprints.</strong> Defines what shape the data must have. A <code>Profile</code> must have a username (string), an age_group (string), etc. TypeScript uses these to warn you if you try to use a field that doesn't exist.</div>
+    <div class="detail">Analogy: a blueprint for a house. You define "a house has a door, 2 windows, and a roof". If you try to build a house with 3 doors but no roof, TypeScript immediately flags the error before you even run the code.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">components/Layout.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech tailwind">Tailwind</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc"><strong>The navigation shell.</strong> The top bar on desktop (with logo and links) and the bottom tab bar on mobile. It wraps all the authenticated pages. Uses React Router's <code>&lt;Outlet /&gt;</code> — a placeholder that renders whichever page is currently active.</div>
+    <div class="detail">This is how you avoid repeating the navigation code in every single page. One Layout wraps them all.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/LoginPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The login form. When you submit, it queries the <code>profiles</code> table in Supabase: "does a user exist with this username and password?". If yes — stores the profile in AuthContext and redirects to <code>/discover</code>. Also logs the login to the <code>user_logins</code> table.</div>
+    <div class="detail">Note: passwords are stored as plain text (max 5 chars). This is fine for a prototype/demo but would need encryption (bcrypt/hashing) in a real production app.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/RegisterPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">A multi-step signup wizard with 10 steps. Step 1 collects basic info. Steps 2–10 walk through the personality questionnaire. At the end, it inserts a new row into <code>profiles</code> AND into <code>questionnaires</code> in Supabase.</div>
+    <div class="detail">The progress bar is calculated as (currentStep / totalSteps) * 100. Each step uses React state to save what you typed, building up an object that gets submitted all at once at the final step.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/DiscoverPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The browse screen. Fetches all active profiles from Supabase, then uses JavaScript's <code>useMemo</code> to filter them by gender, age, region, etc. without re-fetching. Displays one profile at a time. Clicking "Observe" inserts a row into the <code>observations</code> table.</div>
+    <div class="detail">useMemo means "compute this filtered list, but only when the filters change — not every time the page re-renders". This is a performance optimisation.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/FlirtsPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The messaging screen. Two tabs: active chats (accepted flirts) and pending proposals. Selecting a conversation loads messages from the <code>messages</code> table. Typing and sending inserts a new message. Accepting a proposal inserts a row into the <code>flirts</code> table.</div>
+    <div class="detail">On mobile it shows either the list OR the chat (not both). On desktop it shows both side by side. This is achieved with Tailwind's responsive classes like <code>hidden md:block</code>.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/MyProfilePage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">Edit your profile and manage photos. Uploading a photo sends it to <strong>Supabase Storage</strong> (a file hosting service). The returned URL is saved in the <code>profile_photos</code> table. You can upload up to 5 photos, set one as primary, and delete others.</div>
+    <div class="detail">Supabase Storage works like a mini Google Drive in the cloud. You upload a file, get back a public URL, then store that URL in the database.</div>
+  </div>
+
+</div>
+</section>
+
+<!-- ===================== ADMIN APP FILES ===================== -->
+<section id="admin-app">
+<h2>🛠️ Admin App — File by File</h2>
+<p>Files in <code>admin-app/src/</code>. Same structure as user-app, different purpose.</p>
+
+<div class="file-cards">
+
+  <div class="file-card">
+    <div class="filename">context/AuthContext.tsx (admin)</div>
+    <div class="tags"><span class="tech react">React Context</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">Admin-only password gate. The password is hardcoded as <code>aura2024</code> (no database). When entered correctly, it stores <code>true</code> in localStorage. All admin pages check this — if not logged in, redirect to the admin login page.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">components/AdminLayout.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech tailwind">Tailwind</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The dark sidebar with navigation links to all admin sections. Uses React Router's <code>&lt;NavLink&gt;</code> which automatically adds an "active" style to the currently selected menu item.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/DashboardPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">The home screen for the admin. Shows 4 KPI cards: total members, joined today, active flirts, messages sent. Each number is fetched from Supabase. Also shows a "recent members" list.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/MembersPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">A full table of all users with search and filter. The admin can edit user details (UPDATE in Supabase), change their status to suspended/active, or delete them (DELETE from Supabase). This is the main moderation tool.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/MessagesPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">Lists all message threads from all users. The admin can expand any thread to read the messages and delete individual messages if needed. This is the content moderation page.</div>
+  </div>
+
+  <div class="file-card">
+    <div class="filename">pages/UserLoginsPage.tsx</div>
+    <div class="tags"><span class="tech react">React</span> <span class="tech supabase">Supabase</span> <span class="badge fe">FRONTEND</span></div>
+    <div class="desc">Shows the last 500 login events from the <code>user_logins</code> table — who logged in and when. Every time a user successfully logs in via the user-app, a row is inserted there automatically.</div>
+  </div>
+
+</div>
+</section>
+
+<!-- ===================== SUPABASE ===================== -->
+<section id="supabase">
+<h2>🗄️ Supabase — The Database Explained</h2>
+
+<p>Supabase is the <strong>only backend</strong> in this project. It runs in the cloud. You manage it via a browser dashboard at supabase.com. The <code>setup.sql</code> file creates all these tables when pasted into the Supabase SQL editor.</p>
+
+<div class="tip">
+  <div class="tip-label">💡 WHERE IS SUPABASE CONNECTED IN CODE?</div>
+  <p>In both <code>user-app/src/lib/supabase.ts</code> and <code>admin-app/src/lib/supabase.ts</code>. These files contain the Supabase project URL and public API key. Every page that needs data imports <code>db</code> from this file.</p>
+</div>
+
+<h3>The 9 Database Tables</h3>
+
+<div class="db-table">
+  <div class="tname">profiles</div>
+  <div class="tdesc">The main user table. Stores username, password, age group, gender, region, about me text, interests list, and photo URL. Also has a <code>status</code> field (active/suspended) that admins can change.</div>
+  <div class="twho">Used by: LoginPage, RegisterPage, DiscoverPage, MembersPage (admin)</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">questionnaires</div>
+  <div class="tdesc">Deep personality data for each user. 28 fields covering life situation, physical appearance, lifestyle, values, dealbreakers, and intellectual interests. Also has a <code>q_visibility</code> JSON field — users can set each chapter to "public" or "flirts only".</div>
+  <div class="twho">Used by: RegisterPage, QuestionnaireEditPage, ProfileDetailModal</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">profile_photos</div>
+  <div class="tdesc">Multiple photos per user. Stores the photo URL (from Supabase Storage), whether it's the primary photo, and the display order. Each user can have up to 5 photos.</div>
+  <div class="twho">Used by: MyProfilePage</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">observations</div>
+  <div class="tdesc">Your private watchlist. When you click "Observe" on a profile, a row is added here. The observed person never knows. You can send a flirt proposal to anyone in your observations list.</div>
+  <div class="twho">Used by: DiscoverPage (add), ObservePage (view/remove)</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">flirt_proposals</div>
+  <div class="tdesc">The first step of connecting. When you like someone, you send a proposal with an optional personal message. They can accept or decline. You get max 2 attempts per person. Status: pending / accepted / declined.</div>
+  <div class="twho">Used by: ObservePage (send), FlirtsPage (accept/decline)</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">flirts</div>
+  <div class="tdesc">A mutual connection — created only when someone accepts a proposal. This is the "match" equivalent. Once a flirt exists, both users can message each other.</div>
+  <div class="twho">Used by: FlirtsPage (view/create), MatchesPage (admin view)</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">messages</div>
+  <div class="tdesc">Chat messages between two connected users. Each message belongs to a flirt (connection). Stores sender ID, content, and timestamp.</div>
+  <div class="twho">Used by: FlirtsPage (send/receive), MessagesPage (admin moderate)</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">user_logins</div>
+  <div class="tdesc">A login history log. Every time a user logs in successfully, a new row is inserted with their username and a timestamp. Used by admins to track activity.</div>
+  <div class="twho">Used by: LoginPage (insert), UserLoginsPage admin (view)</div>
+</div>
+
+<div class="db-table">
+  <div class="tname">feedback</div>
+  <div class="tdesc">User feedback submissions — category (bug, idea, etc.), a 1–5 star rating, and free text. The admin can filter and read these in the FeedbackPage admin.</div>
+  <div class="twho">Used by: FeedbackPage user (submit), FeedbackPage admin (read)</div>
+</div>
+
+<div style="margin-top:20px"></div>
+<h3>Supabase Storage (for Photos)</h3>
+<div class="db-table" style="border-color:#c9a96e44">
+  <div class="tname" style="color:#c9a96e">profile-photos (Storage Bucket)</div>
+  <div class="tdesc">Not a database table — this is a file storage bucket, like Dropbox. When a user uploads a profile photo, the image file goes here. Supabase returns a public URL. That URL is then saved in the <code>profile_photos</code> table.</div>
+  <div class="twho">Used by: MyProfilePage (upload/delete)</div>
+</div>
+</section>
+
+<!-- ===================== DATA FLOW ===================== -->
+<section id="data-flow">
+<h2>🔄 How Data Flows — End to End</h2>
+
+<p>Here is what happens step by step when a user does something simple — like sending a message.</p>
+
+<h3>Example: User types and sends a message</h3>
+
+<div class="flow">
+  <div class="flow-step"><div class="num">1</div><div class="label">User types in the chat box</div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">2</div><div class="label">React updates state on every keystroke</div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">3</div><div class="label">User clicks Send</div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">4</div><div class="label">FlirtsPage.tsx calls <code>db.from('messages').insert(…)</code></div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">5</div><div class="label">Supabase saves it to PostgreSQL database</div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">6</div><div class="label">React re-fetches messages and shows new one</div></div>
+</div>
+
+<h3 style="margin-top:28px">Example: Admin suspends a user</h3>
+
+<div class="flow">
+  <div class="flow-step"><div class="num">1</div><div class="label">Admin clicks "Suspend" in MembersPage</div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">2</div><div class="label"><code>db.from('profiles').update({status:'suspended'})</code></div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">3</div><div class="label">Supabase updates the row in profiles table</div></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step"><div class="num">4</div><div class="label">User's next login is blocked (status ≠ active)</div></div>
+</div>
+
+<div class="analogy" style="margin-top:24px">
+  <div class="label">📦 THE GENERAL DATA FLOW PATTERN</div>
+  <p><strong>Browser</strong> (React renders UI) ↔ <strong>Supabase JS library</strong> (translates your code into HTTP requests) ↔ <strong>Supabase cloud</strong> (runs your query) ↔ <strong>PostgreSQL</strong> (stores the data). The React app is the client — it always asks Supabase. Supabase is the server — it always has the data.</p>
+</div>
+
+<hr class="divider">
+
+<h2>📐 How a React Component Works (Simple Example)</h2>
+
+<div class="tip">
+  <div class="tip-label">📖 READ THIS IF YOU'RE NEW TO REACT</div>
+  <p>A React component is just a JavaScript function that returns HTML (called JSX). It can have <strong>state</strong> (data that changes) and <strong>effects</strong> (code that runs when the page loads or when something changes).</p>
+</div>
+
+<div class="tree" style="font-size:13px; line-height:1.8">
+  <div style="color:#4a4860; margin-bottom:8px">// Simplified version of what a page looks like</div>
+  <div style="color:#3b82f6">function <span style="color:#e8d5a3">DiscoverPage</span>() {</div>
+  <div class="indent1" style="color:#4a4860">// STATE: data that can change and triggers a re-render</div>
+  <div class="indent1 file">const [profiles, setProfiles] = useState([])  <span class="comment">← list of users</span></div>
+  <div style="margin:8px 0"></div>
+  <div class="indent1" style="color:#4a4860">// EFFECT: runs once when the page loads</div>
+  <div class="indent1 file">useEffect(() => {</div>
+  <div class="indent2 file" style="color:#3ecf8e">db.from('profiles').select('*')  <span class="comment">← fetch from Supabase</span></div>
+  <div class="indent2 file">.then(({ data }) => setProfiles(data))  <span class="comment">← save to state</span></div>
+  <div class="indent1 file">}, [])</div>
+  <div style="margin:8px 0"></div>
+  <div class="indent1" style="color:#4a4860">// RENDER: the HTML this component shows</div>
+  <div class="indent1 file">return (</div>
+  <div class="indent2 file">&lt;<span style="color:#c9a96e">div</span> <span style="color:#38bdf8">className</span>="grid gap-4"&gt;  <span class="comment">← Tailwind class</span></div>
+  <div class="indent3 file">{profiles.<span style="color:#e8d5a3">map</span>(p => &lt;<span style="color:#c9a96e">ProfileCard</span> key={p.id} profile={p} /&gt;)}  <span class="comment">← React component</span></div>
+  <div class="indent2 file">&lt;/<span style="color:#c9a96e">div</span>&gt;</div>
+  <div class="indent1 file">)</div>
+  <div style="color:#3b82f6">}</div>
+</div>
+
+<hr class="divider">
+
+<h2>🧩 Key Concepts Summary</h2>
+
+<div class="concept-grid">
+  <div class="concept-box">
+    <h3>State (<code>useState</code>)</h3>
+    <p>Data stored inside a component that, when changed, causes React to re-render the screen. Example: the list of profiles, the current filter value, the text you're typing.</p>
+  </div>
+  <div class="concept-box">
+    <h3>Effect (<code>useEffect</code>)</h3>
+    <p>Code that runs "as a side effect" — usually to fetch data from Supabase when a page first loads, or when a dependency (like a filter) changes.</p>
+  </div>
+  <div class="concept-box">
+    <h3>Context (<code>useContext</code>)</h3>
+    <p>Global state shared across all components. Used here for "who is logged in". Instead of passing it as props everywhere, any component can just call <code>useAuth()</code>.</p>
+  </div>
+  <div class="concept-box">
+    <h3>Props</h3>
+    <p>Data passed from a parent component to a child component. Like function arguments. Example: <code>&lt;ProfileCard profile={p} /&gt;</code> passes the profile object as a prop.</p>
+  </div>
+  <div class="concept-box">
+    <h3>Component</h3>
+    <p>A reusable UI building block. A Button, a Card, a Modal — each is a component. Compose them like Lego to build pages. Defined once, used many times.</p>
+  </div>
+  <div class="concept-box">
+    <h3>Route</h3>
+    <p>A mapping from a URL path to a component. <code>/discover</code> renders DiscoverPage, <code>/profile</code> renders MyProfilePage. React Router handles this without page reloads.</p>
+  </div>
+</div>
+
+</section>
+
+</main>
+
+<footer>
+  Aura Dating App — Beginner's Codebase Guide &nbsp;|&nbsp; Built with React · TypeScript · Tailwind · Supabase
+</footer>
+
+</body>
+</html>

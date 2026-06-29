@@ -117,6 +117,26 @@ export default function LoginPage() {
             </svg>
           </a>
 
+          <a
+            href="/codebase-guide.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-4 bg-[#131320] border border-white/8 hover:border-aura-gold/30 rounded-xl px-4 py-3.5 transition-all duration-200 hover:bg-[#1a1a2e]"
+          >
+            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-aura-gold/10 border border-aura-gold/20 flex items-center justify-center group-hover:bg-aura-gold/15 transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-aura-gold">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm text-white font-medium leading-tight">Codebase Guide for Beginners</div>
+              <div className="text-[11px] text-slate-500 font-light mt-0.5">File tree · React · TypeScript · Tailwind · Supabase explained</div>
+            </div>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600 group-hover:text-aura-gold transition-colors flex-shrink-0">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+
           <p className="text-[10px] text-slate-700 font-light tracking-wider text-center mt-1">
             Restricted area — authorised personnel only
           </p>
